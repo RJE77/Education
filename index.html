@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Russell Everson's hands-on network and Windows deployment lab: OPNsense, Active Directory, DNS, DHCP, WDS, PXE, WinPE, and USB imaging.">
+  <meta name="theme-color" content="#0a1726">
+  <title>Russell Everson | Network Lab</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1726'/%3E%3Cpath d='M13 46h38M19 19h26v21H19zM25 25h14M25 32h9' fill='none' stroke='%2348d4c7' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <style>
+    :root { color-scheme: dark; --bg:#0a1726; --panel:#102338; --panel2:#142b43; --line:#28445b; --ink:#ecf5fb; --muted:#b3c7d7; --aqua:#48d4c7; --gold:#e6c67a; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.65 system-ui,-apple-system,Segoe UI,Arial,sans-serif; }
+    a { color:var(--aqua); text-underline-offset:.2em; }
+    a:focus-visible { outline:3px solid var(--gold); outline-offset:4px; border-radius:2px; }
+    .wrap { width:min(1120px,calc(100% - 36px)); margin:auto; }
+    header { border-bottom:1px solid var(--line); background:#0d1d2e; }
+    .nav { min-height:70px; display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; padding:12px 0; }
+    .brand { color:var(--ink); text-decoration:none; font-weight:750; letter-spacing:.02em; }
+    nav { display:flex; gap:20px; flex-wrap:wrap; }
+    nav a { color:var(--muted); text-decoration:none; font-size:.94rem; }
+    nav a:hover { color:var(--ink); }
+    main { padding-bottom:72px; }
+    .hero { padding:76px 0 70px; display:grid; grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr); align-items:center; gap:48px; }
+    .eyebrow { color:var(--aqua); text-transform:uppercase; font-size:.78rem; letter-spacing:.16em; font-weight:750; margin:0 0 12px; }
+    h1 { font-size:clamp(2.5rem,6vw,4.7rem); line-height:1.07; letter-spacing:-.045em; margin:0 0 20px; }
+    h2 { font-size:clamp(1.8rem,3vw,2.35rem); line-height:1.18; letter-spacing:-.025em; margin:0 0 14px; }
+    h3 { font-size:1.18rem; line-height:1.3; margin:0 0 12px; }
+    p { margin:0 0 15px; }
+    .lead { font-size:1.14rem; color:var(--muted); max-width:62ch; }
+    .hero-note { margin-top:24px; color:var(--muted); font-size:.94rem; }
+    .map { padding:24px; border:1px solid var(--line); background:linear-gradient(135deg,#132b42,#0d2031); border-radius:16px; box-shadow:0 24px 65px #0004; }
+    .map-title { margin:0 0 18px; color:var(--muted); font-size:.84rem; text-transform:uppercase; letter-spacing:.11em; }
+    .map-row { display:flex; gap:10px; flex-wrap:wrap; }
+    .node { flex:1 1 120px; border:1px solid #416279; border-radius:10px; background:#0a1b2a; padding:11px 12px; min-width:0; }
+    .node strong,.node span { display:block; }
+    .node strong { font-size:.96rem; }
+    .node span { color:var(--muted); font-size:.82rem; }
+    .map-line { width:2px; height:27px; margin:0 auto; background:var(--aqua); }
+    .map-center { text-align:center; border-color:var(--aqua); }
+    .section { padding:56px 0; border-top:1px solid var(--line); }
+    .section-intro { color:var(--muted); max-width:75ch; margin-bottom:25px; }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+    .card { border:1px solid var(--line); border-radius:14px; padding:23px; background:var(--panel); }
+    .card p:last-child { margin-bottom:0; }
+    .tag { color:var(--aqua); font-size:.78rem; font-weight:750; letter-spacing:.1em; text-transform:uppercase; margin:0 0 14px; }
+    .wide { grid-column:span 2; }
+    .facts { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    .facts dl { margin:0; }
+    .facts dt { color:var(--muted); font-size:.85rem; margin-top:15px; }
+    .facts dt:first-child { margin-top:0; }
+    .facts dd { margin:3px 0 0; font-weight:650; overflow-wrap:anywhere; }
+    .timeline { list-style:none; padding:0; margin:24px 0 0; border-left:2px solid var(--line); }
+    .timeline li { position:relative; padding:0 0 26px 24px; }
+    .timeline li:last-child { padding-bottom:0; }
+    .timeline li:before { content:""; position:absolute; left:-7px; top:7px; width:12px; height:12px; border-radius:50%; background:var(--aqua); }
+    .timeline h3 { margin-bottom:5px; }
+    .timeline p { color:var(--muted); margin:0; }
+    .callout { border-left:4px solid var(--gold); padding:18px 22px; background:var(--panel2); border-radius:0 12px 12px 0; color:var(--muted); }
+    .callout strong { color:var(--ink); }
+    footer { border-top:1px solid var(--line); padding:28px 0 45px; color:var(--muted); font-size:.92rem; }
+    @media (max-width:780px) { .hero { grid-template-columns:1fr; padding:54px 0; gap:26px; } .grid,.facts { grid-template-columns:1fr; } .wide { grid-column:auto; } .section { padding:42px 0; } }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="#top">Russell Everson / Network Lab</a>
+      <nav aria-label="Page sections">
+        <a href="#architecture">Architecture</a><a href="#deployment">Deployment</a><a href="#troubleshooting">Troubleshooting</a><a href="#next">Next steps</a>
+      </nav>
+    </div>
+  </header>
+  <main id="top" class="wrap">
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Hands-on infrastructure portfolio</p>
+        <h1 id="page-title">A working network lab, built and tested end to end.</h1>
+        <p class="lead">I built a VirtualBox lab to practice routing, DHCP, DNS, Active Directory, and Windows deployment. I use it to trace failures across the network, verify fixes, and document the results.</p>
+        <p class="hero-note">Russell Everson · IT specialist and network administrator</p>
+      </div>
+      <div class="map" role="img" aria-label="OPNsense routes between the virtual lab LAN and internet. DC01 provides Active Directory, DNS, and WDS to Windows and Ubuntu clients on the lab LAN.">
+        <p class="map-title">Lab path · 192.168.50.0/24</p>
+        <div class="map-row"><div class="node map-center"><strong>Internet / NAT</strong><span>VirtualBox uplink</span></div></div>
+        <div class="map-line"></div>
+        <div class="map-row"><div class="node map-center"><strong>OPNsense</strong><span>Gateway · 192.168.50.1</span></div></div>
+        <div class="map-line"></div>
+        <div class="map-row">
+          <div class="node"><strong>DC01</strong><span>AD · DNS · WDS<br>192.168.50.10</span></div>
+          <div class="node"><strong>PXE-Test / Lab1</strong><span>Windows clients</span></div>
+          <div class="node"><strong>Ubuntu</strong><span>DHCP test client</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="architecture" class="section" aria-labelledby="architecture-title">
+      <p class="eyebrow">01 / Architecture</p>
+      <h2 id="architecture-title">Services that work together</h2>
+      <p class="section-intro">The virtual LAN is isolated in VirtualBox. OPNsense connects that LAN to a NAT uplink, while DC01 provides identity, name resolution, and deployment services.</p>
+      <div class="grid">
+        <article class="card"><p class="tag">Routing & addressing</p><h3>OPNsense + Kea DHCP</h3><p>Configured the LAN gateway at 192.168.50.1/24 and issued client addresses on the lab subnet. Pointed client DNS toward DC01.</p></article>
+        <article class="card"><p class="tag">Identity & DNS</p><h3>Windows Server 2022</h3><p>Promoted DC01 for <strong>lab.local</strong> at 192.168.50.10. Tested domain membership, DNS resolution, user accounts, groups, and shared-folder access.</p></article>
+        <article class="card"><p class="tag">Cross-platform testing</p><h3>Windows + Ubuntu</h3><p>Used Windows clients and Ubuntu Server to verify DHCP leases, gateway reachability, DNS, and internet access from the virtual LAN.</p></article>
+      </div>
+    </section>
+
+    <section id="deployment" class="section" aria-labelledby="deployment-title">
+      <p class="eyebrow">02 / Deployment project</p>
+      <h2 id="deployment-title">PXE boot to physical imaging</h2>
+      <p class="section-intro">The deployment exercise began with WDS on DC01 and progressed from a virtual PXE client to a bootable WinPE USB for an isolated physical laptop.</p>
+      <div class="grid">
+        <article class="card wide"><p class="tag">Network boot</p><h3>WDS and Windows PE</h3><p>Installed WDS integrated with Active Directory, added an x64 Windows PE boot image from the ADK, and booted PXE-Test through UEFI into the WinPE command prompt. Confirmed a DHCP lease and successful ping to DC01.</p></article>
+        <article class="card"><p class="tag">Virtual deployment</p><h3>Windows 11 image</h3><p>Applied Windows 11 Pro from an <code>install.wim</code> share to a GPT disk, built UEFI boot files, configured Recovery, and reached Windows setup in PXE-Test.</p></article>
+        <article class="card"><p class="tag">Portable media</p><h3>Two-partition USB</h3><p>Created a 2 GB FAT32 WinPE boot partition and an NTFS image partition for the image file larger than FAT32's 4 GB file limit. Booted a physical laptop from the USB into WinPE.</p></article>
+        <article class="card wide"><p class="tag">Physical deployment</p><h3>Image applied to the laptop</h3><p>Identified the internal Kingston drive separately from the ONN USB, prepared EFI, Microsoft Reserved, Windows, and Recovery partitions, applied the Windows 11 Pro image, created UEFI boot files, and registered Windows Recovery. First boot verification is the remaining check.</p></article>
+      </div>
+      <div class="facts" style="margin-top:24px">
+        <div class="card"><h3>Deployment details</h3><dl><dt>Deployment server</dt><dd>DC01 · Windows Server 2022</dd><dt>Boot environment</dt><dd>Windows PE (AMD64) · UEFI</dd><dt>Image source</dt><dd>Windows 11 <code>install.wim</code>, Pro index 6</dd></dl></div>
+        <div class="card"><h3>Validation completed</h3><dl><dt>PXE-Test network</dt><dd>192.168.50.101 · DC01 ping replies</dd><dt>Virtual deployment</dt><dd>Windows 11 setup reached</dd><dt>Physical deployment</dt><dd>DISM, BCDBoot, and ReAgentc succeeded</dd></dl></div>
+      </div>
+    </section>
+
+    <section id="troubleshooting" class="section" aria-labelledby="troubleshooting-title">
+      <p class="eyebrow">03 / Troubleshooting notes</p>
+      <h2 id="troubleshooting-title">Problems traced to their cause</h2>
+      <ol class="timeline">
+        <li><h3>Ubuntu received IPv6 but no IPv4 lease</h3><p>Checked its VirtualBox network attachment and moved the client onto the same internal network as the OPNsense LAN. It later received 192.168.50.106.</p></li>
+        <li><h3>PXE-Test showed a black screen with UEFI</h3><p>Changed the virtual machine to one vCPU. It subsequently displayed Windows Boot Manager, loaded WinPE, and reached the command prompt.</p></li>
+        <li><h3>WinPE could not use the physical USB as one FAT32 volume</h3><p>Separated boot files and the larger Windows image into FAT32 and NTFS partitions, then verified the image was visible from WinPE on the laptop.</p></li>
+      </ol>
+    </section>
+
+    <section id="next" class="section" aria-labelledby="next-title">
+      <p class="eyebrow">04 / Build log</p>
+      <h2 id="next-title">What I am validating next</h2>
+      <p class="section-intro">Confirm the physical laptop completes first boot and Windows setup, then test the reusable deployment script with a disposable target. Planned lab additions include a print server, network segmentation, and security checks in the isolated environment.</p>
+      <div class="callout"><strong>Lab scope:</strong> The deployment image is Windows 11 Pro. The physical laptop is being used as a temporary imaging exercise; activation requires an appropriate Pro license. Production deployment would also include hardware checks, drivers, backups, and licensing verification.</div>
+    </section>
+  </main>
+  <footer><div class="wrap">Russell Everson · Home infrastructure lab · Updated September 2026</div></footer>
+</body>
+</html>
