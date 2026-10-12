@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Russell Everson's hands-on network and Windows deployment lab: OPNsense, Active Directory, DNS, DHCP, WDS, PXE, WinPE, and USB imaging.">
+  <meta name="description" content="Russell Everson's hands-on network and Windows deployment lab: OPNsense, Active Directory, DNS, DHCP, WDS, PXE, WinPE, USB imaging, and Cisco OSPF routing with backup-path testing.">
   <meta name="theme-color" content="#0a1726">
   <title>Russell Everson | Network Lab</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1726'/%3E%3Cpath d='M13 46h38M19 19h26v21H19zM25 25h14M25 32h9' fill='none' stroke='%2348d4c7' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
@@ -69,7 +69,7 @@
     <div class="wrap nav">
       <a class="brand" href="#top">Russell Everson / Network Lab</a>
       <nav aria-label="Page sections">
-        <a href="#architecture">Architecture</a><a href="#deployment">Deployment</a><a href="#troubleshooting">Troubleshooting</a><a href="#next">Next steps</a>
+        <a href="#architecture">Architecture</a><a href="#deployment">Deployment</a><a href="#troubleshooting">Troubleshooting</a><a href="#ospf">OSPF lab</a><a href="#next">Next steps</a>
       </nav>
     </div>
   </header>
@@ -131,6 +131,35 @@
         <li><h3>WinPE could not use the physical USB as one FAT32 volume</h3><p>Separated boot files and the larger Windows image into FAT32 and NTFS partitions, then verified the image was visible from WinPE on the laptop.</p></li>
       </ol>
     </section>
+
+    <section id="ospf" class="section" aria-labelledby="ospf-title">
+      <p class="eyebrow">Routing project / October 12, 2026</p>
+      <h2 id="ospf-title">OSPF routing and a tested backup path</h2>
+      <p class="section-intro">Built a Cisco Packet Tracer network with three 2911 routers, two 2960 switches, and two PCs. Configured separate LAN and transit subnets, established OSPF neighbors in area 0, and verified that the PCs could still communicate after the direct router link was disabled.</p>
+      <div class="grid">
+        <article class="card"><p class="tag">Static routing</p><h3>Established paths in both directions</h3><p>Assigned interface addresses and PC default gateways, enabled router ports, and tested each local link. Diagnosed destination-host-unreachable messages by inspecting routing tables. Added static routes for the opposite LAN and its return path, then verified PC-to-PC ping.</p></article>
+        <article class="card"><p class="tag">Dynamic routing</p><h3>Replaced static routes with OSPF</h3><p>Enabled OSPF process 1 in area 0 using network statements and wildcard masks. Verified FULL neighbor states, removed the static routes, and confirmed remote LAN entries marked O in the routing tables.</p></article>
+        <article class="card"><p class="tag">Resilience test</p><h3>Verified the alternate route</h3><p>Added a middle router and two new transit networks. Corrected missing interface addresses and enabled the outer routers' new ports. After both new OSPF neighbors formed, shut down R1's direct link to R2: the PC-to-PC ping still received replies through the middle router.</p></article>
+      </div>
+      <div class="facts" style="margin-top:24px">
+        <div class="card"><h3>Addressing plan</h3><dl>
+          <dt>Left LAN / gateway</dt><dd>192.168.10.0/24 / 192.168.10.1</dd>
+          <dt>Right LAN / gateway</dt><dd>192.168.11.0/24 / 192.168.11.1</dd>
+          <dt>Direct R1–R2 link</dt><dd>192.168.12.1 ↔ 192.168.12.2</dd>
+          <dt>R1–middle link</dt><dd>192.168.13.1 ↔ 192.168.13.2</dd>
+          <dt>Middle–R2 link</dt><dd>192.168.14.1 ↔ 192.168.14.2</dd>
+        </dl></div>
+        <div class="card"><h3>Verification commands</h3><dl>
+          <dt>Interface addresses and status</dt><dd><code>show ip interface brief</code></dd>
+          <dt>OSPF interface participation</dt><dd><code>show ip ospf interface brief</code></dd>
+          <dt>Neighbor synchronization</dt><dd><code>show ip ospf neighbor</code></dd>
+          <dt>Learned routes</dt><dd><code>show ip route</code></dd>
+          <dt>End-to-end reachability</dt><dd>PC ping to 192.168.11.2</dd>
+        </dl></div>
+      </div>
+      <div class="callout" style="margin-top:24px"><strong>Observed result:</strong> PC-to-PC ping succeeded with the direct link disabled. This demonstrates OSPF reconvergence to the alternate path in the simulation; convergence time and packet loss during the transition were not measured.</div>
+    </section>
+
     <section id="next" class="section" aria-labelledby="next-title">
       <p class="eyebrow">04 / Build log</p>
       <h2 id="next-title">What I am validating next</h2>
@@ -138,7 +167,7 @@
       <div class="callout"><strong>Lab scope:</strong> The deployment image is Windows 11 Pro. The physical laptop is being used as a temporary imaging exercise; activation requires an appropriate Pro license. Production deployment would also include hardware checks, drivers, backups, and licensing verification.</div>
     </section>
   </main>
-  <footer><div class="wrap">Russell Everson · Home infrastructure lab · Updated September 2026</div></footer>  
+  <footer><div class="wrap">Russell Everson · Home infrastructure lab · Updated October 2026</div></footer>  
   <p style="text-align:center; padding:24px;">
   <a href="./packet-demo.html">
     Try the Interactive Network Demo →    
