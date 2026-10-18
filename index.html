@@ -69,7 +69,7 @@
     <div class="wrap nav">
       <a class="brand" href="#top">Russell Everson / Network Lab</a>
       <nav aria-label="Page sections">
-        <a href="#architecture">Architecture</a><a href="#deployment">Deployment</a><a href="#troubleshooting">Troubleshooting</a><a href="#ospf">OSPF lab</a><a href="#next">Next steps</a>
+        <a href="#architecture">Architecture</a><a href="#deployment">Deployment</a><a href="#troubleshooting">Troubleshooting</a><a href="#ospf">OSPF lab</a><a href="#wireshark">Wireshark</a><a href="#next">Next steps</a>
       </nav>
     </div>
   </header>
@@ -158,6 +158,19 @@
         </dl></div>
       </div>
       <div class="callout" style="margin-top:24px"><strong>Observed result:</strong> PC-to-PC ping succeeded with the direct link disabled. This demonstrates OSPF reconvergence to the alternate path in the simulation; convergence time and packet loss during the transition were not measured.</div>
+    </section>
+
+
+    <section id="wireshark" class="section" aria-labelledby="wireshark-title">
+      <p class="eyebrow">Packet analysis / Learning in progress</p>
+      <h2 id="wireshark-title">Wireshark: connect symptoms to packet evidence</h2>
+      <p class="section-intro">I am learning Wireshark on my desktop through video study and practice. My current focus is selecting the right capture adapter, filtering traffic, and explaining what DNS, ARP, and ICMP packets reveal about connectivity.</p>
+      <div class="grid">
+        <article class="card"><p class="tag">Name resolution</p><h3>Follow a DNS exchange</h3><p>Practice finding a query and its matching response with the <code>dns</code> display filter. Compare a successful lookup with repeated queries that have no visible answer.</p></article>
+        <article class="card"><p class="tag">Local delivery</p><h3>Understand ARP and the gateway</h3><p>Use <code>arp</code> to examine local address resolution. For an off-subnet destination, identify why the client needs the gateway’s MAC address.</p></article>
+        <article class="card"><p class="tag">Connectivity</p><h3>Compare ping requests and replies</h3><p>Use <code>icmp</code> to match echo requests and replies. Separate direct-IP reachability from name resolution, and avoid drawing conclusions beyond the evidence.</p></article>
+      </div>
+      <div class="callout" style="margin-top:24px"><strong>Interactive teaching example:</strong> Filter a synthetic packet trace, inspect individual packets, and compare successful DNS with an unanswered query. This demonstration is simulated and does not represent a completed capture from my lab.<p style="margin-top:12px;margin-bottom:0"><a href="./wireshark-demo.html">Explore the Wireshark packet-analysis example →</a></p></div>
     </section>
 
     <section id="next" class="section" aria-labelledby="next-title">
