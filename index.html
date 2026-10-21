@@ -186,5 +186,25 @@
     Try the Interactive Network Demo →    
   </a>
 </p>
+<script>
+(() => {
+  const hosts = ["eversonsports.football", "www.eversonsports.football", "rje77.github.io"];
+  if (location.protocol !== "https:" || !hosts.includes(location.hostname)) return;
+  if (location.hostname === "rje77.github.io" && !location.pathname.startsWith("/Education/")) return;
+  window.addEventListener("pageshow", () => {
+    fetch("https://portfolio-visitor-alert.rje758.workers.dev/", {
+      method: "POST",
+      mode: "cors",
+      credentials: "omit",
+      cache: "no-store",
+      keepalive: true
+    }).then(response => {
+      if (!response.ok) console.warn("Portfolio visitor alert was not delivered.");
+    }).catch(() => {
+      // Notification failures must not interrupt the portfolio.
+    });
+  });
+})();
+</script>
 </body>
 </html>
