@@ -13,4 +13,24 @@ $('send').onclick=async()=>{let run=++token;clear();$('send').disabled=true;$('d
 if(named){steps.push(['resolver','2. Client asks DC01 for DNS',broken?'The DNS query times out. No destination address is available.':'DC01 returns a simulated destination IP, using a cached answer or upstream lookup.',broken]);if(!broken)steps.push(['client','3. DNS reply reaches the client','The client now knows the destination address. Website traffic does not pass through DC01.'])}
 if(!named||!broken)steps.push(['firewall','Client sends through its default gateway','The remote IP is outside the local subnet. OPNsense allows the test and translates the source address with NAT.'],['internet','Remote destination receives the traffic','The simulated remote destination sends a reply.'],['firewall','Reply passes the stateful firewall','OPNsense matches the reply to the connection and reverses NAT.'],['client','Success: reply received',named?'Name resolution and the simulated network path both worked.':'Direct IP connectivity worked. If name lookup failed, focus on DNS.']);
 for(let step of steps){if(run!==token)return;entry(...step);await new Promise(r=>setTimeout(r,1200));}if(run===token){$('send').disabled=false;$('dns').disabled=false;$('target').disabled=false;}};
-</script></html>
+</script><script>
+(() => {
+  const hosts = ["eversonsports.football", "www.eversonsports.football", "rje77.github.io"];
+  if (location.protocol !== "https:" || !hosts.includes(location.hostname)) return;
+  if (location.hostname === "rje77.github.io" && !location.pathname.startsWith("/Education/")) return;
+  window.addEventListener("pageshow", () => {
+    fetch("https://portfolio-visitor-alert.rje758.workers.dev/", {
+      method: "POST",
+      mode: "cors",
+      credentials: "omit",
+      cache: "no-store",
+      keepalive: true
+    }).then(response => {
+      if (!response.ok) console.warn("Portfolio visitor alert was not delivered.");
+    }).catch(() => {
+      // Notification failures must not interrupt the portfolio.
+    });
+  });
+})();
+</script>
+</html>
