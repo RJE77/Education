@@ -43,4 +43,24 @@ let mode='healthy',selected=null;const $=id=>document.getElementById(id);
 function inspect(p){selected=p.n;$('detail').textContent='Packet '+p.n+' · '+p.detail;document.querySelectorAll('#packets tr').forEach(r=>r.classList.toggle('selected',Number(r.dataset.n)===p.n))}
 function render(){const rows=(mode==='healthy'?successful:unanswered).filter(p=>matches(p,$('filter').value));$('packets').replaceChildren();rows.forEach(p=>{const tr=document.createElement('tr');tr.dataset.n=p.n;const td=document.createElement('td'),button=document.createElement('button');button.textContent=p.n;button.setAttribute('aria-label','Inspect packet '+p.n);button.onclick=()=>inspect(p);td.append(button);tr.append(td);[p.time,p.src,p.dst,p.proto,p.info].forEach(v=>{const c=document.createElement('td');c.textContent=v;tr.append(c)});$('packets').append(tr)});$('count').textContent=rows.length+' of '+(mode==='healthy'?successful:unanswered).length+' packets displayed';$('healthy').setAttribute('aria-pressed',String(mode==='healthy'));$('failed').setAttribute('aria-pressed',String(mode==='failed'));$('result').textContent=mode==='healthy'?'The synthetic trace includes a DNS answer and a matching ICMP echo reply. Name resolution and this reachability test both succeed.':'The synthetic trace contains repeated DNS queries without a visible answer, while a separate direct-IP ping receives a reply. DNS resolution needs investigation; the exact cause is not established.';if(rows.length)inspect(rows.find(p=>p.n===selected)||rows[0]);else $('detail').textContent='No packets match this filter.'}
 $('healthy').onclick=()=>{mode='healthy';selected=null;render()};$('failed').onclick=()=>{mode='failed';selected=null;render()};$('filter').onchange=render;render();
-</script></body></html>
+</script><script>
+(() => {
+  const hosts = ["eversonsports.football", "www.eversonsports.football", "rje77.github.io"];
+  if (location.protocol !== "https:" || !hosts.includes(location.hostname)) return;
+  if (location.hostname === "rje77.github.io" && !location.pathname.startsWith("/Education/")) return;
+  window.addEventListener("pageshow", () => {
+    fetch("https://portfolio-visitor-alert.rje758.workers.dev/", {
+      method: "POST",
+      mode: "cors",
+      credentials: "omit",
+      cache: "no-store",
+      keepalive: true
+    }).then(response => {
+      if (!response.ok) console.warn("Portfolio visitor alert was not delivered.");
+    }).catch(() => {
+      // Notification failures must not interrupt the portfolio.
+    });
+  });
+})();
+</script>
+</body></html>
