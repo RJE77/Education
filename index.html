@@ -69,7 +69,7 @@
     <div class="wrap nav">
       <a class="brand" href="#top">Russell Everson / Network Lab</a>
       <nav aria-label="Page sections">
-        <a href="#architecture">Architecture</a><a href="#deployment">Deployment</a><a href="#troubleshooting">Troubleshooting</a><a href="#ospf">OSPF lab</a><a href="#wireshark">Wireshark</a><a href="#next">Next steps</a>
+        <a href="#architecture">Architecture</a><a href="#physical-switch">Physical VLANs</a><a href="#deployment">Deployment</a><a href="#troubleshooting">Troubleshooting</a><a href="#ospf">OSPF lab</a><a href="#wireshark">Wireshark</a><a href="#recent-work">Latest work</a><a href="#next">Next steps</a>
       </nav>
     </div>
   </header>
@@ -106,6 +106,28 @@
       </div>
     </section>
 
+
+    <section id="physical-switch" class="section" aria-labelledby="physical-switch-title">
+      <p class="eyebrow">Physical switching / November 2026</p>
+      <h2 id="physical-switch-title">Managed switching and 802.1Q VLAN segmentation</h2>
+      <p class="section-intro">Expanded the virtual network lab with a NETGEAR GS108E eight-port managed switch. Established management connectivity, created purpose-specific VLANs, and configured access ports and a trunk-mode uplink for future integration.</p>
+      <div class="grid">
+        <article class="card"><p class="tag">Verified · Management</p><h3>Restored switch access</h3><p>Diagnosed APIPA addressing on a dedicated desktop Ethernet interface, assigned <code>192.168.0.10/24</code>, and successfully reached the switch at <code>192.168.0.239</code> without modifying the existing home Wi-Fi network.</p></article>
+        <article class="card"><p class="tag">Configured · VLANs</p><h3>Purpose-specific segmentation</h3><p>Created VLAN 10 (MGMT), 20 (Clients), 30 (Security), 40 (servers), and 50 (Guest) using Basic 802.1Q mode. Retained VLAN 1 for the current management connection.</p></article>
+        <article class="card"><p class="tag">Configured · Ports</p><h3>Access ports and uplink</h3><p>Assigned port 2 to VLAN 10; ports 3–4 to VLAN 20; ports 5–6 to VLAN 30; port 7 to VLAN 40; and port 8 to trunk mode. Port 1 remains an access port on VLAN 1.</p></article>
+      </div>
+      <div class="callout" style="margin-top:24px"><strong>Validation still pending:</strong> Test connectivity and isolation with physical clients, verify trunk VLAN allowances and tagging, and attach a lab access point for the Guest VLAN. These results are not yet claimed as completed.</div>
+    </section>
+
+    <section id="recent-work" class="section" aria-labelledby="recent-work-title">
+      <p class="eyebrow">Current projects / November 2026</p>
+      <h2 id="recent-work-title">Hardware recovery and automation practice</h2>
+      <div class="grid">
+        <article class="card"><p class="tag">HP Stream · Imaging</p><h3>Investigating boot failure and restoring deployment</h3><p>Investigated HP boot error <code>3F0</code>; storage passed the HP quick diagnostic, and Windows Setup detected the approximately 58 GB internal drive. Confirmed there were no partitions, rebuilt installation media using Rufus, and successfully booted the laptop to Windows 11 Setup. The device subsequently reached Windows first-run naming, with final installation and driver validation pending.</p></article>
+        <article class="card"><p class="tag">Python · Early development</p><h3>Cisco Price Hunter</h3><p>Started <code>cisco_price_hunter.py</code> to practice input validation, variables, price comparisons, and formatted output. Fixed a Python <code>NameError</code> during local testing. Live marketplace integration and automated comparison remain planned features.</p></article>
+        <article class="card"><p class="tag">Security automation · In progress</p><h3>Portfolio visit notifications</h3><p>The portfolio contains a browser-side POST request to a Cloudflare Worker intended to trigger a Pushover alert for website visits. End-to-end notification delivery has not yet been verified; rate limiting and reliability checks remain to be completed.</p></article>
+      </div>
+    </section>
     <section id="deployment" class="section" aria-labelledby="deployment-title">
       <p class="eyebrow">02 / Deployment project</p>
       <h2 id="deployment-title">PXE boot to physical imaging</h2>
@@ -176,11 +198,11 @@
     <section id="next" class="section" aria-labelledby="next-title">
       <p class="eyebrow">04 / Build log</p>
       <h2 id="next-title">What I am validating next</h2>
-      <p class="section-intro">Confirm the physical laptop completes first boot and Windows setup, then test the reusable deployment script with a disposable target. Planned lab additions include a print server, network segmentation, and security checks in the isolated environment.</p>
+      <p class="section-intro">Complete Windows first-run setup and verify the HP Stream drivers; then test VLAN isolation on the physical NETGEAR switch, validate the trunk uplink, and complete the portfolio notification service. Planned additions also include print services and a dedicated guest wireless network.</p>
       <div class="callout"><strong>Lab scope:</strong> The deployment image is Windows 11 Pro. The physical laptop is being used as a temporary imaging exercise; activation requires an appropriate Pro license. Production deployment would also include hardware checks, drivers, backups, and licensing verification.</div>
     </section>
   </main>
-  <footer><div class="wrap">Russell Everson · Home infrastructure lab · Updated October 2026</div></footer>  
+  <footer><div class="wrap">Russell Everson · Home infrastructure lab · Updated November 2026</div></footer>  
   <p style="text-align:center; padding:24px;">
   <a href="./packet-demo.html">
     Try the Interactive Network Demo →    
