@@ -62,6 +62,25 @@
     footer { border-top:1px solid var(--line); padding:28px 0 45px; color:var(--muted); font-size:.92rem; }
     @media (max-width:780px) { .hero { grid-template-columns:1fr; padding:54px 0; gap:26px; } .grid,.facts { grid-template-columns:1fr; } .wide { grid-column:auto; } .section { padding:42px 0; } }
     @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+
+    /* Lab evolution roadmap */
+    .roadmap-columns { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:24px 0; }
+    .roadmap-panel { background:linear-gradient(155deg,#142d45,#0d2031); border:1px solid var(--line); border-radius:16px; padding:24px; }
+    .roadmap-panel.future { border-color:#526b70; }
+    .roadmap-panel h3 { font-size:1.35rem; }
+    .roadmap-kicker { color:var(--aqua); text-transform:uppercase; font-size:.78rem; letter-spacing:.1em; font-weight:750; }
+    .roadmap-stack { display:grid; gap:9px; margin-top:18px; }
+    .roadmap-item { display:flex; gap:12px; align-items:flex-start; padding:12px 14px; background:#081a2b; border:1px solid #2b4b60; border-radius:10px; }
+    .roadmap-item .state { flex:0 0 auto; color:#8ce0d3; font-weight:800; }
+    .roadmap-item p { margin:0; font-size:.91rem; color:var(--muted); }
+    .roadmap-item strong { display:block; color:var(--ink); }
+    .roadmap-milestones { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:20px; }
+    .roadmap-milestone { padding:16px; border:1px solid var(--line); background:var(--panel); border-radius:12px; }
+    .roadmap-milestone .number { color:var(--aqua); font-size:.82rem; font-weight:800; }
+    .roadmap-milestone strong { display:block; margin:5px 0; }
+    .roadmap-milestone p { font-size:.9rem; color:var(--muted); margin:0; }
+    @media (max-width:780px) { .roadmap-columns { grid-template-columns:1fr; } .roadmap-milestones { grid-template-columns:1fr 1fr; } }
+    @media (max-width:460px) { .roadmap-milestones { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
@@ -69,7 +88,7 @@
     <div class="wrap nav">
       <a class="brand" href="#top">Russell Everson / Network Lab</a>
       <nav aria-label="Page sections">
-        <a href="#architecture">Architecture</a><a href="#physical-switch">Physical VLANs</a><a href="#deployment">Deployment</a><a href="#troubleshooting">Troubleshooting</a><a href="#ospf">OSPF lab</a><a href="#wireshark">Wireshark</a><a href="#recent-work">Latest work</a><a href="#education">Education</a><a href="#next">Next steps</a>
+        <a href="#lab-roadmap">Lab roadmap</a><a href="#architecture">Architecture</a><a href="#physical-switch">Physical VLANs</a><a href="#deployment">Deployment</a><a href="#troubleshooting">Troubleshooting</a><a href="#ospf">OSPF lab</a><a href="#wireshark">Wireshark</a><a href="#recent-work">Latest work</a><a href="#education">Education</a><a href="#next">Next steps</a>
       </nav>
     </div>
   </header>
@@ -93,6 +112,47 @@
           <div class="node"><strong>Ubuntu</strong><span>DHCP test client</span></div>
         </div>
       </div>
+    </section>
+
+
+    <section id="lab-roadmap" class="section" aria-labelledby="roadmap-title">
+      <p class="eyebrow">Lab evolution / Current capabilities and future architecture</p>
+      <h2 id="roadmap-title">From a working home lab to an enterprise-style environment</h2>
+      <p class="section-intro">This roadmap distinguishes what I have built and tested from planned projects. The future topology is a design goal—not a claim that the equipment, network segmentation, or security services are already deployed.</p>
+      <div class="roadmap-columns">
+        <article class="roadmap-panel">
+          <p class="roadmap-kicker">Current lab · Built and tested</p>
+          <h3>Working infrastructure</h3>
+          <div class="roadmap-stack">
+            <div class="roadmap-item"><span class="state" aria-hidden="true">✓</span><p><strong>OPNsense firewall</strong>LAN 192.168.50.1; WAN recently observed at 192.168.1.128. Web management, external ping, and DNS tested.</p></div>
+            <div class="roadmap-item"><span class="state" aria-hidden="true">✓</span><p><strong>DC01 · Windows Server 2022</strong>192.168.50.10 · lab.local · AD DS, DNS, WDS; LDAP (389) and Kerberos TCP (88) reachability tested.</p></div>
+            <div class="roadmap-item"><span class="state" aria-hidden="true">✓</span><p><strong>Windows 11 clients</strong>Physical Windows 11 Pro laptop joined to lab.local; desktop management address 192.168.50.20.</p></div>
+            <div class="roadmap-item"><span class="state" aria-hidden="true">✓</span><p><strong>NETGEAR GS108E managed switch</strong>Management 192.168.0.239; VLANs 10 Management, 20 Clients, 30 Security, 40 Servers, 50 Guest configured. End-to-end isolation remains to be validated.</p></div>
+            <div class="roadmap-item"><span class="state" aria-hidden="true">✓</span><p><strong>PXE and imaging groundwork</strong>WDS/WinPE installed; virtual PXE boot and Windows image-application exercises performed. Repeatable physical PXE deployment is the next goal.</p></div>
+            <div class="roadmap-item"><span class="state" aria-hidden="true">✓</span><p><strong>Guest interface</strong>OPNsense guest subnet 192.168.60.0/24 and captive-portal testing; Wi-Fi access point and full VLAN integration are future work.</p></div>
+          </div>
+        </article>
+        <article class="roadmap-panel future">
+          <p class="roadmap-kicker">Future vision · Planned and proposed</p>
+          <h3>Enterprise-style capabilities</h3>
+          <div class="roadmap-stack">
+            <div class="roadmap-item"><span class="state" aria-hidden="true">→</span><p><strong>Automated network imaging</strong>PXE boot physical laptops from DC01, test drivers and Windows edition selection, and document repeatable deployment procedures.</p></div>
+            <div class="roadmap-item"><span class="state" aria-hidden="true">→</span><p><strong>Cisco router and Catalyst switch</strong>Evaluate refurbished gear, verify IOS features and licensing, then practice trunks, routing, OSPF, and failure recovery.</p></div>
+            <div class="roadmap-item"><span class="state" aria-hidden="true">→</span><p><strong>VLAN segmentation and access controls</strong>Separate management, clients, servers, security cameras, guests, and IoT. Future VLAN subnet assignments will be designed and tested rather than assumed.</p></div>
+            <div class="roadmap-item"><span class="state" aria-hidden="true">→</span><p><strong>Cameras, phones, and tablets</strong>Isolated camera/NVR network, mobile notifications, guest and trusted device Wi-Fi, and secure access to permitted services.</p></div>
+            <div class="roadmap-item"><span class="state" aria-hidden="true">→</span><p><strong>Raspberry Pi and cybersecurity lab</strong>Monitoring experiments plus an isolated, authorized Kali Linux / WiFi Pineapple / ESP32 testing environment.</p></div>
+            <div class="roadmap-item"><span class="state" aria-hidden="true">→</span><p><strong>VPN and central dashboard</strong>Secure remote lab access, device availability, service health, logging, alerts, and configuration documentation.</p></div>
+          </div>
+        </article>
+      </div>
+      <h3>Build sequence</h3>
+      <div class="roadmap-milestones">
+        <div class="roadmap-milestone"><span class="number">01 / NEXT</span><strong>PXE deployment</strong><p>Reliable installation from the WDS server to physical computers.</p></div>
+        <div class="roadmap-milestone"><span class="number">02 / DESIGN</span><strong>VLANs and Cisco</strong><p>Validate switching, routing, trunks, and isolation.</p></div>
+        <div class="roadmap-milestone"><span class="number">03 / EXPAND</span><strong>Devices and security</strong><p>Add cameras, mobile devices, IoT, and isolated testing equipment.</p></div>
+        <div class="roadmap-milestone"><span class="number">04 / OPERATE</span><strong>Monitoring and VPN</strong><p>Secure remote access and operational dashboards.</p></div>
+      </div>
+      <p class="hero-note">Current IP addresses reflect recent lab tests; future VLAN IP ranges and device addresses have not yet been assigned. This section is updated as milestones are completed.</p>
     </section>
 
     <section id="architecture" class="section" aria-labelledby="architecture-title">
