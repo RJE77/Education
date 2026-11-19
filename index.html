@@ -126,6 +126,25 @@
     @keyframes intro-spin { to { transform:rotate(540deg); } }
     @media(max-width:580px) { .intro-modules { grid-template-columns:repeat(2,1fr); } .intro-top { align-items:flex-start; } .intro-locks { font-size:.65rem; } }
     @media(prefers-reduced-motion:reduce) { .intro-ball,.intro-dominoes i,.intro-gear { animation:none!important; } .intro-door { transition:none; } }
+
+    /* Employer contact form */
+    .contact-panel { max-width:820px; padding:26px; border:1px solid var(--line); border-radius:16px; background:var(--panel); }
+    .contact-fields { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .contact-field { display:flex; flex-direction:column; gap:5px; margin:0 0 15px; }
+    .contact-field label { font-weight:650; color:var(--ink); }
+    .contact-field input,.contact-field select,.contact-field textarea { width:100%; background:#091b2c; border:1px solid #527188; border-radius:8px; padding:11px 12px; color:var(--ink); font:inherit; }
+    .contact-field input:focus-visible,.contact-field select:focus-visible,.contact-field textarea:focus-visible { outline:3px solid var(--gold); outline-offset:2px; }
+    .contact-consent { display:flex; gap:10px; align-items:flex-start; margin:8px 0 16px; }
+    .contact-consent input { width:20px; height:20px; margin-top:3px; flex:none; }
+    .contact-actions { display:flex; flex-wrap:wrap; align-items:center; gap:12px; }
+    .contact-actions button { font:inherit; font-weight:700; padding:11px 17px; color:#06151b; background:var(--aqua); border:0; border-radius:9px; cursor:pointer; }
+    .contact-actions button:disabled { cursor:not-allowed; background:#5c7786; color:#dde7eb; }
+    .contact-review { margin-top:16px; background:#0b2132; border:1px solid var(--aqua); border-radius:12px; padding:18px; }
+    .contact-review dl { display:grid; grid-template-columns:120px 1fr; gap:8px; overflow-wrap:anywhere; }
+    .contact-review dt { color:var(--muted); }
+    .contact-review dd { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; }
+    .contact-notice { font-size:.94rem; color:var(--muted); }
+    @media(max-width:650px) { .contact-fields { grid-template-columns:1fr; } .contact-review dl { grid-template-columns:1fr; gap:1px; } }
   </style>
 </head>
 <body>
@@ -160,7 +179,7 @@
     <div class="wrap nav">
       <a class="brand" href="#top">Russell Everson / Network Lab</a>
       <nav aria-label="Page sections">
-        <a href="#lab-roadmap">Lab roadmap</a><a href="#architecture">Architecture</a><a href="#physical-switch">Physical VLANs</a><a href="#deployment">Deployment</a><a href="#troubleshooting">Troubleshooting</a><a href="#ospf">OSPF lab</a><a href="#wireshark">Wireshark</a><a href="#recent-work">Latest work</a><a href="#education">Education</a><a href="#next">Next steps</a>
+        <a href="#lab-roadmap">Lab roadmap</a><a href="#architecture">Architecture</a><a href="#physical-switch">Physical VLANs</a><a href="#deployment">Deployment</a><a href="#troubleshooting">Troubleshooting</a><a href="#ospf">OSPF lab</a><a href="#wireshark">Wireshark</a><a href="#recent-work">Latest work</a><a href="#education">Education</a><a href="#next">Next steps</a><a href="#contact">Contact</a>
       </nav>
     </div>
   </header>
@@ -350,6 +369,41 @@
       <h2 id="next-title">What I am validating next</h2>
       <p class="section-intro">Complete Windows first-run setup and verify the HP Stream drivers; then test VLAN isolation on the physical NETGEAR switch, validate the trunk uplink, and complete the portfolio notification service. Planned additions also include print services and a dedicated guest wireless network.</p>
       <div class="callout"><strong>Lab scope:</strong> The deployment image is Windows 11 Pro. The physical laptop is being used as a temporary imaging exercise; activation requires an appropriate Pro license. Production deployment would also include hardware checks, drivers, backups, and licensing verification.</div>
+    </section>
+
+    <section id="contact" class="section" aria-labelledby="contact-title">
+      <p class="eyebrow">Let's connect / Employers and visitors</p>
+      <h2 id="contact-title">Contact Russell</h2>
+      <p class="section-intro">Have an IT job opportunity, a project challenge you'd like to see, or feedback on my Network Lab? I'd be glad to hear from you.</p>
+      <div class="contact-panel">
+        <p class="contact-notice"><strong>Form preview — sending is not active yet.</strong> You can review the contact form, but no information will be sent until secure delivery and spam protection are enabled.</p>
+        <form id="contact-form">
+          <div class="contact-field"><label for="contact-reason">Reason for contacting me</label>
+            <select id="contact-reason" name="reason" required>
+              <option value="Job opportunity">Job opportunity / recruiter</option>
+              <option value="Project suggestion">Suggest a technical project</option>
+              <option value="General feedback">General feedback / professional networking</option>
+            </select>
+          </div>
+          <div class="contact-fields">
+            <div class="contact-field"><label for="contact-name">Your name</label><input id="contact-name" name="name" type="text" maxlength="80" autocomplete="name" required></div>
+            <div class="contact-field"><label for="contact-company">Company (optional)</label><input id="contact-company" name="company" type="text" maxlength="100" autocomplete="organization"></div>
+            <div class="contact-field"><label for="contact-email">Email address</label><input id="contact-email" name="email" type="email" maxlength="180" autocomplete="email"></div>
+            <div class="contact-field"><label for="contact-phone">Phone number (optional)</label><input id="contact-phone" name="phone" type="tel" maxlength="35" autocomplete="tel"></div>
+          </div>
+          <p class="contact-notice">Please provide an email address, a phone number, or both so Russell can reply.</p>
+          <div class="contact-field"><label for="contact-message">Your message</label><textarea id="contact-message" name="message" rows="5" maxlength="900" required placeholder="Tell me about an opportunity, suggest a project, or share feedback."></textarea></div>
+          <label class="contact-consent" for="contact-consent"><input id="contact-consent" name="consent" type="checkbox" required><span>I agree that the information I entered may be sent privately to Russell through a third-party notification service so he can read and respond to my message. It will not appear publicly on this website.</span></label>
+          <div class="contact-actions"><button id="contact-review-button" type="submit">OK — Review my message</button><span id="contact-status" class="contact-notice" role="status" aria-live="polite">Nothing is transmitted when you review.</span></div>
+        </form>
+        <div id="contact-review" class="contact-review" hidden tabindex="-1">
+          <h3>Review before sending</h3>
+          <p class="contact-notice">Check your details below. No information has been sent.</p>
+          <dl id="contact-review-details"></dl>
+          <div class="contact-actions"><button id="contact-edit" type="button">Edit message</button><button id="contact-send" type="button" disabled>Send message (coming soon)</button></div>
+          <p class="contact-notice">Private delivery and server-side anti-spam checks must be activated before submission is available.</p>
+        </div>
+      </div>
     </section>
   </main>
   <footer><div class="wrap">Russell Everson · Home infrastructure lab · Updated November 2026</div></footer>  
@@ -549,6 +603,43 @@
   if (!reduceMotion) {
     try { if (sessionStorage.getItem("labIntroSeen") !== "yes") openIntro(); } catch { openIntro(); }
   }
+})();
+</script>
+
+<script>
+(() => {
+  const form = document.getElementById("contact-form");
+  const review = document.getElementById("contact-review");
+  const details = document.getElementById("contact-review-details");
+  const status = document.getElementById("contact-status");
+  const fields = ["reason", "name", "company", "email", "phone", "message"];
+  const labels = {reason:"Reason",name:"Name",company:"Company",email:"Email",phone:"Phone",message:"Message"};
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    const data = Object.fromEntries(new FormData(form));
+    if (!data.name?.trim() || !data.message?.trim() || (!data.email?.trim() && !data.phone?.trim())) {
+      status.textContent = "Please add your name, a message, and an email or phone number.";
+      return;
+    }
+    if (!form.elements.consent.checked || !form.reportValidity()) return;
+    details.replaceChildren();
+    for (const field of fields) {
+      const term = document.createElement("dt");
+      term.textContent = labels[field];
+      const value = document.createElement("dd");
+      value.textContent = data[field]?.trim() || "Not provided";
+      details.append(term, value);
+    }
+    review.hidden = false;
+    review.focus();
+    status.textContent = "Preview ready. No information has been sent.";
+  });
+  document.getElementById("contact-edit").addEventListener("click", () => {
+    review.hidden = true;
+    form.elements.name.focus();
+  });
+  form.addEventListener("input", () => { review.hidden = true; });
+  form.addEventListener("change", () => { review.hidden = true; });
 })();
 </script>
 </body>
