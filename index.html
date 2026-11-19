@@ -342,6 +342,63 @@
     });
   });
 })();
+</script> 
+  
+ 
+<script>
+(() => {
+  // Track approximate time while the page is visible.
+  let visibleSince = document.visibilityState === "visible"
+    ? performance.now()
+    : null;
+
+  let visibleMilliseconds = 0;
+  let summarySent = false;
+
+  function sendVisitSummary() {
+    if (summarySent) return;
+
+    if (visibleSince !== null) {
+      visibleMilliseconds += performance.now() - visibleSince;
+      visibleSince = null;
+    }
+
+    const seconds = Math.floor(visibleMilliseconds / 1000);
+
+    // Ignore extremely short visits.
+    if (seconds < 5) return;
+
+    summarySent = true;
+
+    fetch("https://portfolio-visitor-alert.rje758.workers.dev/", {
+      method: "POST",
+      mode: "cors",
+      credentials: "omit",
+      keepalive: true,
+      headers: {
+        "Content-Type": "text/plain"
+      },
+      body: JSON.stringify({
+        event: "departure",
+        duration: Math.min(seconds, 86400)
+      })
+    }).catch(() => {
+      // Do not interrupt visitors if sending fails.
+    });
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      sendVisitSummary();
+    } else if (!summarySent) {
+      visibleSince = performance.now();
+    }
+  });
+
+  window.addEventListener("pagehide", sendVisitSummary);
+})();
 </script>
 </body>
 </html>
+
+ 
