@@ -81,9 +81,81 @@
     .roadmap-milestone p { font-size:.9rem; color:var(--muted); margin:0; }
     @media (max-width:780px) { .roadmap-columns { grid-template-columns:1fr; } .roadmap-milestones { grid-template-columns:1fr 1fr; } }
     @media (max-width:460px) { .roadmap-milestones { grid-template-columns:1fr; } }
+
+    /* Optional Rube Goldberg portfolio introduction */
+    #lab-intro[hidden] { display:none !important; }
+    .intro-overlay { position:fixed; inset:0; z-index:9000; overflow:auto; background:radial-gradient(ellipse at 75% 25%,#1c3b51 0%,#08111d 63%); color:#ecf5fb; padding:clamp(18px,4vw,54px); }
+    .intro-inner { max-width:920px; margin:0 auto; }
+    .intro-top { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    .intro-eyebrow { color:#8de9d9; font-size:.8rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; }
+    .intro-overlay h2 { font-size:clamp(1.8rem,4vw,3rem); margin:16px 0 8px; color:#fff; }
+    .intro-copy { color:#b3c7d7; max-width:72ch; }
+    .intro-button { border:1px solid #48d4c7; background:#165750; color:white; border-radius:10px; padding:10px 17px; font:inherit; font-weight:650; cursor:pointer; }
+    .intro-button.secondary { background:transparent; border-color:#8aa5b6; }
+    .intro-button:focus-visible { outline:3px solid #e6c67a; outline-offset:3px; }
+    .intro-stage { position:relative; margin-top:22px; border:1px solid #365870; border-radius:18px; height:clamp(210px,34vw,315px); overflow:hidden; background:linear-gradient(90deg,#070d17,#102035 65%,#08121e); }
+    .intro-door { position:absolute; left:3%; top:14%; height:72%; width:19%; border:5px solid #526c7d; border-radius:6px; background:#070a11; box-shadow:inset -15px 0 #172435; transition:background 1s,box-shadow 1s; }
+    .intro-door::before { content:'↳'; position:absolute; right:10px; top:42%; color:#e6c67a; font-size:23px; }
+    .intro-overlay[data-phase]:not([data-phase="ready"]) .intro-door { background:#1e3d54; box-shadow:inset -30px 0 #0c1826,0 0 45px #48d4c733; }
+    .intro-tech { position:absolute; left:7%; bottom:18%; font-size:clamp(28px,6vw,54px); filter:drop-shadow(0 0 10px #48d4c7); }
+    .intro-track { position:absolute; left:26%; right:9%; bottom:27%; height:6px; background:linear-gradient(90deg,#e6c67a,#48d4c7); transform:rotate(-8deg); transform-origin:50% 50%; border-radius:9px; }
+    .intro-ball { position:absolute; left:25%; bottom:35%; height:clamp(19px,3vw,29px); width:clamp(19px,3vw,29px); border-radius:50%; background:radial-gradient(circle at 32% 28%,#fff6c8,#e6c67a 60%,#7d6032); box-shadow:0 0 20px #e6c67a88; }
+    .intro-overlay[data-phase="roll"] .intro-ball { animation:intro-roll 3.1s ease-in forwards; }
+    .intro-dominoes { position:absolute; left:51%; bottom:26%; display:flex; gap:6px; align-items:flex-end; }
+    .intro-dominoes i { display:block; width:9px; height:40px; border:1px solid #d1f2ec; background:#48d4c7; border-radius:3px; transform-origin:bottom; }
+    .intro-overlay[data-phase="roll"] .intro-dominoes i { animation:intro-fall .55s ease-in forwards; }
+    .intro-overlay[data-phase="roll"] .intro-dominoes i:nth-child(1) { animation-delay:1.4s; }
+    .intro-overlay[data-phase="roll"] .intro-dominoes i:nth-child(2) { animation-delay:1.6s; }
+    .intro-overlay[data-phase="roll"] .intro-dominoes i:nth-child(3) { animation-delay:1.8s; }
+    .intro-overlay[data-phase="roll"] .intro-dominoes i:nth-child(4) { animation-delay:2s; }
+    .intro-gear { position:absolute; left:77%; bottom:21%; font-size:clamp(36px,6vw,66px); color:#48d4c7; }
+    .intro-overlay[data-phase="roll"] .intro-gear { animation:intro-spin 2.2s linear .8s; }
+    .intro-lights { position:absolute; right:7%; top:16%; display:flex; gap:8px; }
+    .intro-lights span { display:block; width:15px; height:15px; border-radius:50%; background:#314657; border:1px solid #637b8c; }
+    .intro-overlay[data-phase="power"] .intro-lights span, .intro-overlay[data-phase="lock"] .intro-lights span { background:#48d4c7; box-shadow:0 0 15px #48d4c7; }
+    .intro-locks { position:absolute; right:6%; bottom:6%; color:#d2e9f2; font-weight:700; font-size:.9rem; }
+    .intro-locks span { opacity:.3; display:inline-block; margin-left:8px; }
+    .intro-overlay[data-phase="lock"] .intro-locks span { opacity:1; color:#e6c67a; }
+    .intro-message { position:absolute; top:10%; left:29%; max-width:60%; color:#e6c67a; font-weight:700; font-size:clamp(.9rem,2.5vw,1.2rem); }
+    .intro-modules { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-top:16px; }
+    .intro-module { padding:12px 7px; text-align:center; border:1px solid #40556a; border-radius:10px; background:#132436; color:#91a9ba; font-size:.87rem; font-weight:650; }
+    .intro-module.online { color:#e8fff8; border-color:#48d4c7; background:#174d4b; box-shadow:0 0 18px #48d4c722; }
+    .intro-controls { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:18px; }
+    @keyframes intro-roll { from { left:25%; bottom:35%; transform:rotate(0); } to { left:80%; bottom:27%; transform:rotate(990deg); } }
+    @keyframes intro-fall { to { transform:rotate(72deg); } }
+    @keyframes intro-spin { to { transform:rotate(540deg); } }
+    @media(max-width:580px) { .intro-modules { grid-template-columns:repeat(2,1fr); } .intro-top { align-items:flex-start; } .intro-locks { font-size:.65rem; } }
+    @media(prefers-reduced-motion:reduce) { .intro-ball,.intro-dominoes i,.intro-gear { animation:none!important; } .intro-door { transition:none; } }
   </style>
 </head>
 <body>
+
+  <section id="lab-intro" class="intro-overlay" role="dialog" aria-modal="true" aria-label="Russell's Network Lab introduction" data-phase="ready" hidden>
+    <div class="intro-inner">
+      <div class="intro-top"><span class="intro-eyebrow">Russell's Network Lab · Startup sequence</span><button id="intro-skip" class="intro-button secondary" type="button">Skip intro → Portfolio</button></div>
+      <h2>Welcome, visitor. Let's bring the network online.</h2>
+      <p class="intro-copy">An IT technician, one rolling ball, a few questionable mechanical decisions... and a surprisingly functional network.</p>
+      <div class="intro-stage" aria-hidden="true">
+        <div class="intro-door"></div><div class="intro-tech">🧑‍💻</div>
+        <div class="intro-track"></div><div class="intro-ball"></div>
+        <div class="intro-dominoes"><i></i><i></i><i></i><i></i></div>
+        <div class="intro-gear">⚙</div><div class="intro-lights"><span></span><span></span><span></span><span></span></div>
+        <div id="intro-message" class="intro-message">The server room is dark. Again.</div>
+        <div class="intro-locks">SERVER ROOM <span>🔒</span><span>🔒</span></div>
+      </div>
+      <div class="intro-modules" aria-label="Portfolio sections coming online">
+        <div class="intro-module" data-intro-module="0">🌐 Explore the Lab</div>
+        <div class="intro-module" data-intro-module="1">🛠 Fix the Network</div>
+        <div class="intro-module" data-intro-module="2">☕ Meet the Admin</div>
+        <div class="intro-module" data-intro-module="3">🎮 Future Projects</div>
+      </div>
+      <div class="intro-controls">
+        <button id="intro-start" class="intro-button" type="button">▶ Start the chain reaction</button>
+        <span id="intro-status" class="intro-copy" role="status">Ready when you are. No autoplay audio.</span>
+      </div>
+    </div>
+  </section>
+
   <header>
     <div class="wrap nav">
       <a class="brand" href="#top">Russell Everson / Network Lab</a>
@@ -99,6 +171,7 @@
         <h1 id="page-title">A working network lab, built and tested end to end.</h1>
         <p class="lead">I built a VirtualBox lab to practice routing, DHCP, DNS, Active Directory, and Windows deployment. I use it to trace failures across the network, verify fixes, and document the results.</p>
         <p class="hero-note">Russell Everson · IT specialist and network administrator</p>
+        <button id="replay-lab-intro" type="button" class="intro-button" style="margin-top:10px">▶ Watch the Network Lab Startup</button>
       </div>
       <div class="map" role="img" aria-label="OPNsense routes between the virtual lab LAN and internet. DC01 provides Active Directory, DNS, and WDS to Windows and Ubuntu clients on the lab LAN.">
         <p class="map-title">Lab path · 192.168.50.0/24</p>
@@ -396,6 +469,86 @@
   });
 
   window.addEventListener("pagehide", sendVisitSummary);
+})();
+</script>
+
+<script>
+(() => {
+  const intro = document.getElementById("lab-intro");
+  const start = document.getElementById("intro-start");
+  const skip = document.getElementById("intro-skip");
+  const status = document.getElementById("intro-status");
+  const message = document.getElementById("intro-message");
+  const modules = [...intro.querySelectorAll("[data-intro-module]")];
+  const replay = document.getElementById("replay-lab-intro");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let timers = [];
+  let previousFocus = null;
+  let running = false;
+  function clearSequence() { timers.forEach(clearTimeout); timers = []; running = false; }
+  function closeIntro() {
+    clearSequence();
+    intro.hidden = true;
+    document.body.style.overflow = "";
+    try { sessionStorage.setItem("labIntroSeen", "yes"); } catch {}
+    (previousFocus && previousFocus.isConnected ? previousFocus : replay).focus();
+  }
+  function openIntro() {
+    clearSequence();
+    previousFocus = document.activeElement;
+    intro.hidden = false;
+    document.body.style.overflow = "hidden";
+    intro.dataset.phase = "ready";
+    message.textContent = "The server room is dark. Again.";
+    status.textContent = "Ready when you are. No autoplay audio.";
+    modules.forEach(m => m.classList.remove("online"));
+    start.disabled = false;
+    start.textContent = "▶ Start the chain reaction";
+    skip.focus();
+  }
+  function later(callback, ms) { timers.push(setTimeout(callback, ms)); }
+  function runIntro() {
+    if (running) return;
+    running = true;
+    start.disabled = true;
+    start.textContent = "Sequence running…";
+    intro.dataset.phase = "roll";
+    message.textContent = "A ball rolls. The dominoes fall. The IT budget is concerned.";
+    status.textContent = "1 / 4 · The Goldberg machine starts!";
+    const stages = [
+      {delay:reduceMotion?350:3300, text:"🌐 Explore the Lab — OPNsense, DC01 and real lab builds online.", phase:"power"},
+      {delay:reduceMotion?650:5400, text:"🛠 Fix the Network — troubleshooting station online.", phase:"power"},
+      {delay:reduceMotion?950:7500, text:"☕ Meet the Admin — coffee service responding.", phase:"power"},
+      {delay:reduceMotion?1250:9600, text:"🎮 Future Projects — Cisco expansion and family simulator online.", phase:"power"}
+    ];
+    stages.forEach((stage, index) => later(() => {
+      intro.dataset.phase = stage.phase;
+      modules[index].classList.add("online");
+      message.textContent = stage.text;
+      status.textContent = (index + 1) + " / 4 · Systems powering up";
+    }, stage.delay));
+    later(() => {
+      intro.dataset.phase = "lock";
+      message.textContent = "CLUNK! CLUNK! Network secured. Unauthorized packets: please use the exit.";
+      status.textContent = "All systems online. Welcome to Russell's Network Lab!";
+    }, reduceMotion?1600:11900);
+    later(closeIntro, reduceMotion?3800:15800);
+  }
+  skip.addEventListener("click", closeIntro);
+  start.addEventListener("click", runIntro);
+  replay.addEventListener("click", openIntro);
+  intro.addEventListener("keydown", event => {
+    if (event.key === "Escape") { event.preventDefault(); closeIntro(); }
+    if (event.key === "Tab") {
+      const choices = [skip, start].filter(button => !button.disabled);
+      const first = choices[0], last = choices[choices.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    }
+  });
+  if (!reduceMotion) {
+    try { if (sessionStorage.getItem("labIntroSeen") !== "yes") openIntro(); } catch { openIntro(); }
+  }
 })();
 </script>
 </body>
