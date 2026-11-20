@@ -528,6 +528,23 @@
   let visibleMilliseconds = 0;
   let summarySent = false;
 
+  // Russell 007: While this page is visible, refresh the last-seen time
+  // for this visit every 30 seconds. These requests do not send Pushover alerts.
+  const heartbeatTimer = setInterval(() => {
+    const token = window.russellVisitToken;
+    if (summarySent || document.visibilityState !== "visible" || !token) return;
+    fetch("https://portfolio-visitor-alert.rje758.workers.dev/", {
+      method: "POST",
+      mode: "cors",
+      credentials: "omit",
+      cache: "no-store",
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify({ event: "heartbeat", sessionToken: token })
+    }).catch(() => {
+      // Heartbeat failures must not interrupt the portfolio.
+    });
+  }, 30000);
+
   function sendVisitSummary() {
     if (summarySent) return;
 
@@ -542,6 +559,7 @@
     if (seconds < 5) return;
 
     summarySent = true;
+    clearInterval(heartbeatTimer);
 
     fetch("https://portfolio-visitor-alert.rje758.workers.dev/", {
       method: "POST",
