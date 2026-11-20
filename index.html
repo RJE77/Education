@@ -155,7 +155,13 @@
     .mouse-intro-bar button:focus-visible { outline:3px solid #e6c67a; }
     #mouse-intro-frame { display:block; width:100%; height:calc(100dvh - 64px); min-height:580px; border:0; }
     @media(max-width:600px) { #mouse-intro-frame { height:calc(100dvh - 94px); min-height:540px; } }
-  </style>
+  
+    .quick-question-float {position:fixed;right:20px;bottom:20px;z-index:8000;display:inline-flex;align-items:center;gap:10px;max-width:calc(100vw - 32px);padding:12px 19px;border:2px solid #a0eee5;border-radius:999px;color:#071421;background:#63e3d3;box-shadow:0 8px 26px #0009;font-size:.96rem;font-weight:800;line-height:1.3;text-decoration:none;}
+    .quick-question-float:hover {background:#a0eee5;color:#071421;}
+    .quick-question-float:focus-visible {outline:3px solid #e6c67a;outline-offset:4px;}
+    @media(max-width:600px){.quick-question-float{right:12px;bottom:12px;padding:11px 15px;font-size:.85rem;}#visitor-thanks{bottom:82px !important;left:12px;right:12px !important;max-width:none !important;}}
+    @media(min-width:601px){#visitor-thanks{bottom:88px !important;}}
+</style>
 </head>
 <body>
 
@@ -393,6 +399,7 @@
       <p class="eyebrow">Let's connect / Employers and visitors</p>
       <h2 id="contact-title">Contact Russell</h2>
       <p class="section-intro">Have an IT job opportunity, a project challenge you'd like to see, or feedback on my Network Lab? I'd be glad to hear from you.</p>
+      <p class="contact-notice"><strong>Quick question?</strong> Use the floating message button. I receive messages on my phone and will respond as soon as I am available. Please provide a reply address or phone number.</p>
       <div class="contact-panel">
         <p class="contact-notice"><strong>Private contact:</strong> Your details are not submitted when you review them. Only clicking Send message after the security check sends your information to Russell through Cloudflare and Pushover.</p>
         <form id="contact-form">
@@ -434,6 +441,19 @@
   </a>
 </p>
 
+<a class="quick-question-float" href="#contact" aria-label="Ask Russell a quick question"><span aria-hidden="true">💬</span> Ask Russell a Question</a>
+<script>
+(() => {
+  const button = document.querySelector(".quick-question-float");
+  const reason = document.getElementById("contact-reason");
+  const message = document.getElementById("contact-message");
+  button.addEventListener("click", () => {
+    reason.value = "General feedback";
+    if (!message.value.trim()) message.placeholder = "What's your quick question about my lab or IT experience?";
+    requestAnimationFrame(() => { message.focus({preventScroll:true}); });
+  });
+})();
+</script>
 <div id="visitor-thanks" role="status" hidden
      style="position:fixed;bottom:20px;right:20px;
      z-index:9999;max-width:380px;padding:22px;
