@@ -376,7 +376,7 @@
       <h2 id="contact-title">Contact Russell</h2>
       <p class="section-intro">Have an IT job opportunity, a project challenge you'd like to see, or feedback on my Network Lab? I'd be glad to hear from you.</p>
       <div class="contact-panel">
-        <p class="contact-notice"><strong>Form preview — sending is not active yet.</strong> You can review the contact form, but no information will be sent until secure delivery and spam protection are enabled.</p>
+        <p class="contact-notice"><strong>Private contact:</strong> Your details are not submitted when you review them. Only clicking Send message after the security check sends your information to Russell through Cloudflare and Pushover.</p>
         <form id="contact-form">
           <div class="contact-field"><label for="contact-reason">Reason for contacting me</label>
             <select id="contact-reason" name="reason" required>
@@ -403,8 +403,8 @@
           <p class="contact-notice">Security check (Cloudflare Turnstile). This check contacts Cloudflare only after you request message review.</p>
           <div id="contact-turnstile" aria-label="Bot protection verification"></div>
           <p id="contact-turnstile-status" class="contact-notice" role="status">Security check is not loaded yet.</p>
-          <div class="contact-actions"><button id="contact-edit" type="button">Edit message</button><button id="contact-send" type="button" disabled>Send message (coming soon)</button></div>
-          <p class="contact-notice">Private delivery and server-side anti-spam checks must be activated before submission is available.</p>
+          <div class="contact-actions"><button id="contact-edit" type="button">Edit message</button><button id="contact-send" type="button" disabled>Send message to Russell</button></div>
+          <p class="contact-notice">This form uses Cloudflare Turnstile verification. Do not include passwords, financial records, or other sensitive information.</p>
         </div>
       </div>
     </section>
@@ -615,13 +615,31 @@
   const review = document.getElementById("contact-review");
   const details = document.getElementById("contact-review-details");
   const status = document.getElementById("contact-status");
+  const report = document.getElementById("contact-turnstile-status");
+  const send = document.getElementById("contact-send");
   const fields = ["reason", "name", "company", "email", "phone", "message"];
+  const labels = {reason:"Reason",name:"Name",company:"Company",email:"Email",phone:"Phone",message:"Message"};
   let turnstileWidgetId = null;
   let turnstileLoading = false;
+  let turnstileToken = "";
+  let isSending = false;
+  let approvedData = null;
+  let lastSentAt = 0;
+  const endpoint = "https://portfolio-visitor-alert.rje758.workers.dev/";
+
+  function setToken(token) {
+    turnstileToken = token || "";
+    send.disabled = !turnstileToken || !approvedData || isSending;
+  }
+  function resetVerification() {
+    setToken("");
+    if (turnstileWidgetId !== null && window.turnstile) {
+      try { window.turnstile.reset(turnstileWidgetId); } catch {}
+    }
+  }
   function loadContactTurnstile() {
     if (turnstileWidgetId !== null || turnstileLoading) return;
     turnstileLoading = true;
-    const report = document.getElementById("contact-turnstile-status");
     report.textContent = "Loading security check…";
     const script = document.createElement("script");
     script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
@@ -631,43 +649,102 @@
         turnstileWidgetId = window.turnstile.render("#contact-turnstile", {
           sitekey:"0x4AAAAAAGJcuAA8Y-6x26kY",
           theme:"dark",
-          callback:() => { report.textContent = "Security check passed. Message sending will be enabled after server verification is configured."; },
-          "expired-callback":() => { report.textContent = "Security check expired. Please verify again."; },
-          "error-callback":() => { report.textContent = "Security check unavailable. Please try again later."; }
+          callback:token => {
+            setToken(token);
+            report.textContent = "Security check complete. Review your information and click Send message when ready.";
+          },
+          "expired-callback":() => {
+            setToken("");
+            report.textContent = "Security check expired. Please verify again.";
+          },
+          "error-callback":() => {
+            setToken("");
+            report.textContent = "Security check unavailable. Please try again later.";
+          }
         });
-      } catch { report.textContent = "Unable to display the security check."; }
+        report.textContent = "Please complete the security check to enable sending.";
+      } catch {
+        report.textContent = "Unable to display the security check.";
+        turnstileLoading = false;
+      }
     };
-    script.onerror = () => { turnstileLoading = false; report.textContent = "Unable to load the security check."; };
+    script.onerror = () => {
+      turnstileLoading = false;
+      report.textContent = "Unable to load the security check.";
+    };
     document.head.appendChild(script);
   }
-  const labels = {reason:"Reason",name:"Name",company:"Company",email:"Email",phone:"Phone",message:"Message"};
+  function invalidateReview() {
+    if (isSending) return;
+    approvedData = null;
+    review.hidden = true;
+    setToken("");
+  }
   form.addEventListener("submit", event => {
     event.preventDefault();
+    if (isSending) return;
     const data = Object.fromEntries(new FormData(form));
     if (!data.name?.trim() || !data.message?.trim() || (!data.email?.trim() && !data.phone?.trim())) {
-      status.textContent = "Please add your name, a message, and an email or phone number.";
+      status.textContent = "Please enter your name, a message, and an email address or phone number.";
       return;
     }
     if (!form.elements.consent.checked || !form.reportValidity()) return;
+    approvedData = Object.fromEntries(fields.map(field => [field, String(data[field] || "").trim()]));
     details.replaceChildren();
     for (const field of fields) {
       const term = document.createElement("dt");
       term.textContent = labels[field];
       const value = document.createElement("dd");
-      value.textContent = data[field]?.trim() || "Not provided";
+      value.textContent = approvedData[field] || "Not provided";
       details.append(term, value);
     }
     review.hidden = false;
     review.focus();
     loadContactTurnstile();
-    status.textContent = "Preview ready. No information has been sent.";
+    if (turnstileToken) setToken(turnstileToken);
+    status.textContent = "Message ready for review. No contact details have been sent.";
   });
   document.getElementById("contact-edit").addEventListener("click", () => {
-    review.hidden = true;
+    if (isSending) return;
+    invalidateReview();
     form.elements.name.focus();
   });
-  form.addEventListener("input", () => { review.hidden = true; });
-  form.addEventListener("change", () => { review.hidden = true; });
+  form.addEventListener("input", invalidateReview);
+  form.addEventListener("change", invalidateReview);
+  send.addEventListener("click", async () => {
+    if (isSending || !approvedData || !turnstileToken || !form.elements.consent.checked) return;
+    if (Date.now() - lastSentAt < 60000) {
+      report.textContent = "Please wait at least one minute before sending another message.";
+      return;
+    }
+    isSending = true;
+    send.disabled = true;
+    document.getElementById("contact-edit").disabled = true;
+    report.textContent = "Sending your message securely…";
+    const token = turnstileToken;
+    try {
+      const response = await fetch(endpoint, {
+        method:"POST", mode:"cors", credentials:"omit", cache:"no-store",
+        headers:{"Content-Type":"text/plain"},
+        body:JSON.stringify({...approvedData,event:"contact",consent:true,turnstileToken:token})
+      });
+      if (!response.ok) throw new Error("HTTP " + response.status);
+      lastSentAt = Date.now();
+      report.textContent = "Message sent successfully. Thank you! Russell has been notified.";
+      status.textContent = "Message submitted successfully.";
+      form.reset();
+      approvedData = null;
+      setToken("");
+      review.hidden = true;
+    } catch {
+      report.textContent = "Message could not be delivered. No confirmation was received; please verify your connection before retrying.";
+      resetVerification();
+    } finally {
+      isSending = false;
+      document.getElementById("contact-edit").disabled = false;
+      send.disabled = !turnstileToken || !approvedData;
+    }
+  });
 })();
 </script>
 </body>
