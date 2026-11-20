@@ -400,6 +400,9 @@
           <h3>Review before sending</h3>
           <p class="contact-notice">Check your details below. No information has been sent.</p>
           <dl id="contact-review-details"></dl>
+          <p class="contact-notice">Security check (Cloudflare Turnstile). This check contacts Cloudflare only after you request message review.</p>
+          <div id="contact-turnstile" aria-label="Bot protection verification"></div>
+          <p id="contact-turnstile-status" class="contact-notice" role="status">Security check is not loaded yet.</p>
           <div class="contact-actions"><button id="contact-edit" type="button">Edit message</button><button id="contact-send" type="button" disabled>Send message (coming soon)</button></div>
           <p class="contact-notice">Private delivery and server-side anti-spam checks must be activated before submission is available.</p>
         </div>
@@ -613,6 +616,30 @@
   const details = document.getElementById("contact-review-details");
   const status = document.getElementById("contact-status");
   const fields = ["reason", "name", "company", "email", "phone", "message"];
+  let turnstileWidgetId = null;
+  let turnstileLoading = false;
+  function loadContactTurnstile() {
+    if (turnstileWidgetId !== null || turnstileLoading) return;
+    turnstileLoading = true;
+    const report = document.getElementById("contact-turnstile-status");
+    report.textContent = "Loading security check…";
+    const script = document.createElement("script");
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+    script.async = true;
+    script.onload = () => {
+      try {
+        turnstileWidgetId = window.turnstile.render("#contact-turnstile", {
+          sitekey:"0x4AAAAAAGJcuAA8Y-6x26kY",
+          theme:"dark",
+          callback:() => { report.textContent = "Security check passed. Message sending will be enabled after server verification is configured."; },
+          "expired-callback":() => { report.textContent = "Security check expired. Please verify again."; },
+          "error-callback":() => { report.textContent = "Security check unavailable. Please try again later."; }
+        });
+      } catch { report.textContent = "Unable to display the security check."; }
+    };
+    script.onerror = () => { turnstileLoading = false; report.textContent = "Unable to load the security check."; };
+    document.head.appendChild(script);
+  }
   const labels = {reason:"Reason",name:"Name",company:"Company",email:"Email",phone:"Phone",message:"Message"};
   form.addEventListener("submit", event => {
     event.preventDefault();
@@ -632,6 +659,7 @@
     }
     review.hidden = false;
     review.focus();
+    loadContactTurnstile();
     status.textContent = "Preview ready. No information has been sent.";
   });
   document.getElementById("contact-edit").addEventListener("click", () => {
