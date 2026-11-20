@@ -418,6 +418,12 @@
           </div>
           <p class="contact-notice">Please provide an email address, a phone number, or both so Russell can reply.</p>
           <div class="contact-field"><label for="contact-message">Your message</label><textarea id="contact-message" name="message" rows="5" maxlength="900" required placeholder="Tell me about an opportunity, suggest a project, or share feedback."></textarea></div>
+          
+<label class="contact-consent">
+  <input type="checkbox" id="quick-response" name="quickResponse">
+  <span>I'd appreciate a quick response.</span>
+</label>
+
           <label class="contact-consent" for="contact-consent"><input id="contact-consent" name="consent" type="checkbox" required><span>I agree that the information I entered may be sent privately to Russell through a third-party notification service so he can read and respond to my message. It will not appear publicly on this website.</span></label>
           <p class="contact-notice"><strong>How to send:</strong> Fill in your details and question, check the consent box, then select <strong>Continue to security check</strong>. On the next screen, verify you are human and click <strong>Send message to Russell</strong>.</p>
           <div class="contact-actions"><button id="contact-review-button" type="submit">Continue to security check →</button><span id="contact-status" class="contact-notice" role="status" aria-live="polite">Nothing is transmitted when you review.</span></div>
@@ -751,6 +757,9 @@
     }
     if (!form.elements.consent.checked || !form.reportValidity()) return;
     approvedData = Object.fromEntries(fields.map(field => [field, String(data[field] || "").trim()]));
+    
+approvedData.quickResponse = form.elements.quickResponse.checked;
+
     details.replaceChildren();
     for (const field of fields) {
       const term = document.createElement("dt");
