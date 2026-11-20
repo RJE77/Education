@@ -476,13 +476,17 @@
   const hosts = ["eversonsports.football", "www.eversonsports.football", "rje77.github.io"];
   if (location.protocol !== "https:" || !hosts.includes(location.hostname)) return;
   if (location.hostname === "rje77.github.io" && !location.pathname.startsWith("/Education/")) return;
+  const visitToken = crypto.randomUUID();
+  window.russellVisitToken = visitToken;
   window.addEventListener("pageshow", () => {
     fetch("https://portfolio-visitor-alert.rje758.workers.dev/", {
       method: "POST",
       mode: "cors",
       credentials: "omit",
       cache: "no-store",
-      keepalive: true
+      keepalive: true,
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify({ event: "arrival", sessionToken: visitToken })
     }).then(response => {
       if (!response.ok) console.warn("Portfolio visitor alert was not delivered.");
     }).catch(() => {
@@ -528,7 +532,8 @@
       },
       body: JSON.stringify({
         event: "departure",
-        duration: Math.min(seconds, 86400)
+        duration: Math.min(seconds, 86400),
+        sessionToken: window.russellVisitToken || null
       })
     }).catch(() => {
       // Do not interrupt visitors if sending fails.
