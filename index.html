@@ -419,11 +419,12 @@
           <p class="contact-notice">Please provide an email address, a phone number, or both so Russell can reply.</p>
           <div class="contact-field"><label for="contact-message">Your message</label><textarea id="contact-message" name="message" rows="5" maxlength="900" required placeholder="Tell me about an opportunity, suggest a project, or share feedback."></textarea></div>
           <label class="contact-consent" for="contact-consent"><input id="contact-consent" name="consent" type="checkbox" required><span>I agree that the information I entered may be sent privately to Russell through a third-party notification service so he can read and respond to my message. It will not appear publicly on this website.</span></label>
-          <div class="contact-actions"><button id="contact-review-button" type="submit">OK — Review my message</button><span id="contact-status" class="contact-notice" role="status" aria-live="polite">Nothing is transmitted when you review.</span></div>
+          <p class="contact-notice"><strong>How to send:</strong> Fill in your details and question, check the consent box, then select <strong>Continue to security check</strong>. On the next screen, verify you are human and click <strong>Send message to Russell</strong>.</p>
+          <div class="contact-actions"><button id="contact-review-button" type="submit">Continue to security check →</button><span id="contact-status" class="contact-notice" role="status" aria-live="polite">Nothing is transmitted when you review.</span></div>
         </form>
         <div id="contact-review" class="contact-review" hidden tabindex="-1">
-          <h3>Review before sending</h3>
-          <p class="contact-notice">Check your details below. No information has been sent.</p>
+          <h3>Step 2 of 2 — Verify and send your message</h3>
+          <p class="contact-notice"><strong>Almost done!</strong> Check your details, complete the security check below, then press <strong>Send message to Russell</strong>. Nothing is sent until you press that final button.</p>
           <dl id="contact-review-details"></dl>
           <p class="contact-notice">Security check (Cloudflare Turnstile). This check contacts Cloudflare only after you request message review.</p>
           <div id="contact-turnstile" aria-label="Bot protection verification"></div>
@@ -671,6 +672,7 @@
   function setToken(token) {
     turnstileToken = token || "";
     send.disabled = !turnstileToken || !approvedData || isSending;
+    send.textContent = turnstileToken && approvedData ? "Send message to Russell" : "Complete security check to send";
   }
   function resetVerification() {
     setToken("");
@@ -741,6 +743,7 @@
     }
     review.hidden = false;
     review.focus();
+    review.scrollIntoView({behavior: "auto", block: "start"});
     loadContactTurnstile();
     if (turnstileToken) setToken(turnstileToken);
     status.textContent = "Message ready for review. No contact details have been sent.";
