@@ -178,23 +178,24 @@
 .xmas-controls{display:flex;justify-content:flex-end;gap:6px;align-items:center;flex-wrap:wrap}
 .xmas-controls .xmas-btn{font-size:.78rem;padding:6px}
 .xmas-controls input{width:64px}
-/* Wisconsin whiteout: red nose appears in the distance before the approaching sleigh. */
-.xmas-whiteout{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.7;background:repeating-linear-gradient(105deg,transparent 0 10px,#eaf5ff80 11px 12px,transparent 14px 28px);background-size:180px 120px;animation:xmas-wind 1.2s linear infinite}
+/* Wisconsin winter: the original photorealistic sleigh starts tiny on the horizon. */
+.xmas-whiteout{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.65;background:repeating-linear-gradient(105deg,transparent 0 10px,#eaf5ff66 11px 12px,transparent 14px 28px);background-size:180px 120px;animation:xmas-wind 1.2s linear infinite}
 @keyframes xmas-wind{to{background-position:-180px 55px}}
-.xmas-approach{position:absolute;z-index:3;left:50%;top:4%;width:min(55vw,550px);height:190px;transform-origin:50% 65%;pointer-events:none;animation:xmas-approach 19s ease-in-out infinite both}
-.xmas-flight-art{width:100%;height:100%;display:block;filter:drop-shadow(0 0 5px #f0d5a4)}
-.xmas-nose{position:absolute;z-index:2;left:72.5%;top:35%;width:13px;height:13px;background:#ff111d;border-radius:50%;box-shadow:0 0 9px 5px #ff3030,0 0 28px 17px #f00000b8;animation:xmas-nose-glow .6s ease-in-out infinite alternate}
-@keyframes xmas-nose-glow{to{box-shadow:0 0 14px 9px #ff3030,0 0 45px 23px #f00000d8}}
-.xmas-hoho{position:absolute;top:6%;left:36%;background:#082039d9;border:1px solid #f5d69a;border-radius:18px;color:white;font-size:clamp(10px,1.1vw,15px);font-weight:800;text-shadow:0 2px 3px #000;padding:5px 9px;white-space:nowrap;animation:xmas-hoho 19s infinite}
-@keyframes xmas-hoho{0%,35%,95%,100%{opacity:0}48%,75%{opacity:1}}
+.xmas-approach{position:absolute;z-index:3;left:66%;top:2%;width:min(74vw,1100px);aspect-ratio:1.78;pointer-events:none;transform-origin:50% 44%;animation:xmas-approach 27s ease-in infinite both}
+.xmas-real-flight{display:block;width:100%;height:100%;object-fit:contain;mask-image:radial-gradient(ellipse 61% 54% at 50% 56%,black 22%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 61% 54% at 50% 56%,black 22%,transparent 100%)}
+.xmas-nose{position:absolute;z-index:4;left:77%;top:37%;width:9px;height:9px;border-radius:50%;background:#ff1826;box-shadow:0 0 11px 7px #ff2020,0 0 35px 19px #e80000;animation:xmas-nose-glow .7s alternate infinite}
+@keyframes xmas-nose-glow{to{box-shadow:0 0 15px 10px #ff3030,0 0 48px 27px #f00000}}
+.xmas-hoho{position:absolute;top:11%;left:25%;white-space:nowrap;color:#fff;font-weight:800;font-size:clamp(12px,2vw,20px);text-shadow:0 2px 7px #000,0 0 12px #fc2b2b;animation:xmas-hoho 27s infinite}
+@keyframes xmas-hoho{0%,48%,92%,100%{opacity:0}62%,84%{opacity:1}}
 @keyframes xmas-approach{
-0%{transform:translate(-50%,0) scale(.03);opacity:.12;filter:blur(10px)}
-12%{opacity:.25;filter:blur(8px)}
-24%{transform:translate(-48%,5px) scale(.11);opacity:.55;filter:blur(4px)}
-40%{transform:translate(-43%,2px) scale(.34);opacity:.88;filter:blur(1px)}
-65%{transform:translate(-36%,4px) scale(1.15);opacity:1;filter:blur(0)}
-87%{transform:translate(-30%,-12px) scale(2.4);opacity:1;filter:blur(0)}
-100%{transform:translate(-23%,-25px) scale(3.1);opacity:0;filter:blur(5px)}
+0%{transform:translate(-50%,2%) scale(.005);opacity:.08;filter:blur(12px)}
+15%{transform:translate(-50%,2%) scale(.015);opacity:.28;filter:blur(9px)}
+30%{transform:translate(-50%,1%) scale(.045);opacity:.48;filter:blur(6px)}
+45%{transform:translate(-50%,1%) scale(.11);opacity:.7;filter:blur(3px)}
+65%{transform:translate(-50%,0) scale(.31);opacity:.93;filter:blur(1px)}
+80%{transform:translate(-50%,0) scale(.7);opacity:1;filter:blur(0)}
+96%{transform:translate(-50%,0) scale(1.6);opacity:1;filter:blur(0)}
+100%{transform:translate(-50%,0) scale(2);opacity:0;filter:blur(2px)}
 }
 .xmas-snow{position:absolute;inset:-260px 0 0;z-index:4;pointer-events:none;overflow:hidden;background-image:radial-gradient(2px 2px at 18px 18px,#fff 98%,transparent),radial-gradient(3px 3px at 58px 44px,#dff6ff 98%,transparent),radial-gradient(2px 2px at 33px 66px,#fff 98%,transparent);background-size:75px 82px,105px 112px,95px 94px;animation:snow-fall-heavy 5.8s linear infinite;opacity:.9}
 .xmas-snow::before,.xmas-snow::after{content:"";position:absolute;inset:0;pointer-events:none}
@@ -258,45 +259,7 @@
  <div class="xmas-whiteout" aria-hidden="true"></div>
  <div class="xmas-approach" aria-hidden="true">
    <div class="xmas-nose"></div>
-   <svg class="xmas-flight-art" viewBox="0 0 760 310" xmlns="http://www.w3.org/2000/svg">
-     <defs>
-       <linearGradient id="deercoat" x2="0" y2="1"><stop stop-color="#8b5c36"/><stop offset="1" stop-color="#34251f"/></linearGradient>
-       <linearGradient id="sleighcoat" x2="0" y2="1"><stop stop-color="#ae2429"/><stop offset="1" stop-color="#4e1420"/></linearGradient>
-       <filter id="winterglow"><feGaussianBlur stdDeviation="5"/></filter>
-     </defs>
-     <g transform="translate(136 80) scale(.72)" fill="url(#deercoat)" stroke="#c4a082" stroke-width="2">
-       <path d="M-70 90 Q-40 28 -3 33 Q30 30 65 65 L95 125 80 146 45 104 17 140 -2 137 -10 93 -50 146 -71 137Z"/>
-       <path d="M-21 44 Q-38 5 -8 -22 Q20 -40 45 -15 L44 24 21 53Z"/>
-       <path d="M-10 -18 L-45 -80 -56 -111 M-30 -53 L-82 -85 M6 -31 L36 -104 43 -126 M22 -69 L69 -92" stroke="#a98565" stroke-width="9" fill="none" stroke-linecap="round"/>
-       <ellipse cx="10" cy="-4" rx="4" ry="5" fill="#e3d9cb" stroke="none"/>
-       <ellipse cx="21" cy="26" rx="12" ry="8" fill="#aa8161" stroke="none"/>
-     </g>
-     <g transform="translate(332 35)" stroke="#c7a189" stroke-width="3" fill="url(#deercoat)">
-       <path d="M-92 170 Q-62 84 -18 94 Q24 73 83 133 L111 210 91 236 52 164 15 229 -7 230 -24 158 -69 238 -93 224Z"/>
-       <path d="M-28 109 Q-48 60 -16 22 Q23 -5 56 35 L55 85 18 121Z"/>
-       <path d="M-13 29 L-73 -52 -78 -104 M-51 -32 L-110 -56 M29 27 L80 -60 82 -113 M56 -21 L120 -44" stroke="#c5a17c" stroke-width="11" fill="none" stroke-linecap="round"/>
-       <ellipse cx="-3" cy="64" rx="5" ry="7" fill="#f6e6d4" stroke="none"/>
-       <path d="M-15 103 Q17 121 53 103" stroke="#eadbc0" stroke-width="8" fill="none"/>
-     </g>
-     <g transform="translate(540 18) scale(.87)" stroke="#c5a082" stroke-width="3" fill="url(#deercoat)">
-       <path d="M-88 170 Q-60 70 -11 87 Q48 78 91 135 L111 219 89 246 51 165 18 230 -8 230 -24 158 -63 240 -89 225Z"/>
-       <path d="M-23 100 Q-42 58 -14 20 Q19 -10 57 35 L55 82 17 114Z"/>
-       <path d="M-10 23 L-60 -53 -76 -119 M-47 -35 L-103 -72 M28 22 L74 -57 92 -119 M56 -21 L117 -55" stroke="#b58d65" stroke-width="12" fill="none" stroke-linecap="round"/>
-       <ellipse cx="-1" cy="61" rx="5" ry="7" fill="#ffe7cc" stroke="none"/>
-       <ellipse cx="18" cy="90" rx="22" ry="12" fill="#9e715c" stroke="none"/>
-     </g>
-     <g transform="translate(18 145)" stroke="#f0bd67" stroke-width="6" fill="url(#sleighcoat)">
-       <path d="M2 75 Q43 106 122 83 L152 48 140 105 Q70 164 2 101Z"/>
-       <path d="M-8 125 Q54 160 157 111" fill="none" stroke-linecap="round"/>
-       <path d="M39 76 L25 12 88 12 120 75Z"/>
-       <circle cx="77" cy="-4" r="20" fill="#f6d1b0" stroke="none"/>
-       <path d="M46 -17 Q75 -59 107 -17Z" fill="#ae2024" stroke="#fff" stroke-width="8"/>
-       <path d="M59 18 L27 64 108 63 95 16Z" fill="#b6282a" stroke="#fff" stroke-width="6"/>
-       <path d="M106 28 L143 15" stroke="#f0c6a0" stroke-width="11" stroke-linecap="round"/>
-       <path d="M57 7 Q78 28 97 8" fill="none" stroke="#fff" stroke-width="13"/>
-     </g>
-     <path d="M165 230 Q295 205 450 206 M165 241 Q300 220 670 204" stroke="#e6c581" stroke-width="2" opacity=".7" fill="none"/>
-   </svg>
+   <img class="xmas-real-flight" src="assets/realistic-santa-flight.png" alt="" onerror="this.style.display='none'">
    <div class="xmas-hoho">Ho! Ho! Ho! Merry Christmas!</div>
  </div>
  <div class="xmas-snow" aria-hidden="true"></div>
