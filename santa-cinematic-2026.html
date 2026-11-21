@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cinematic Santa 2026 | Russell's Network Lab</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#1c4961,#06121e 75%);color:#edf8ff;font:16px/1.5 system-ui,Segoe UI,Arial,sans-serif}
+main{width:min(910px,calc(100% - 28px));margin:0 auto;padding:25px 0 55px}
+.kicker{color:#a7e7db;letter-spacing:.16em;text-transform:uppercase;font-size:.75rem;font-weight:750}
+h1{font:700 clamp(1.75rem,4.6vw,3rem) Georgia,serif;color:#f9d89b;margin:6px 0}
+p{color:#c7dce6;margin:6px 0 15px}
+.stage{position:relative;max-width:730px;margin:18px auto;border-radius:18px;overflow:hidden;border:2px solid #ccac75;background:linear-gradient(#153e52,#051421);box-shadow:0 24px 66px #0009}
+.stage img{display:block;width:100%;height:auto;aspect-ratio:2/1;object-fit:contain}
+.aurora{animation:shimmer 6s ease-in-out infinite alternate;transform-origin:center}
+.sleigh-flight{animation:takeoff 12s ease-in-out infinite;transform-origin:400px 310px}
+.wave{animation:wave 1s ease-in-out 3.3s 3 alternate;transform-origin:143px 6px}
+.gift{animation:giftload 12s ease-in-out infinite;transform-origin:center}
+.flakes{animation:flakes 9s linear infinite}
+@keyframes shimmer{from{opacity:.45;transform:translateX(-30px)}to{opacity:1;transform:translateX(35px)}}
+@keyframes takeoff{0%,25%{transform:translate(0,0) scale(1)}35%{transform:translate(-5px,-6px) scale(1)}50%{transform:translate(35px,-80px) scale(.90)}70%{transform:translate(240px,-240px) scale(.55)}87%,100%{transform:translate(600px,-390px) scale(.25);opacity:0}}
+@keyframes wave{to{transform:rotate(-25deg)}}
+@keyframes giftload{0%,12%{opacity:1;transform:translate(378px,376px)}28%,100%{opacity:0;transform:translate(330px,310px)}}
+@keyframes flakes{to{transform:translateY(480px)}}
+@media(prefers-reduced-motion:reduce){.aurora,.sleigh-flight,.wave,.gift,.flakes{animation:none}}
+.snow{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(2px 2px at 21px 20px,#fff 95%,transparent),radial-gradient(2px 2px at 61px 85px,#fff 95%,transparent);background-size:140px 130px,175px 155px;animation:fall 8s linear infinite}
+@keyframes fall{to{background-position:18px 130px,-22px 155px}}
+#greeting{text-align:center;min-height:2em;font:700 clamp(1.2rem,3.7vw,2rem) Georgia,serif;color:#ffe3a5}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center;margin:18px 0}
+button,a.button{background:#eed091;color:#142b3a;border:1px solid #f4d8a2;border-radius:10px;padding:10px 16px;font:700 .95rem system-ui;cursor:pointer;text-decoration:none}
+button.secondary,a.secondary{background:#154453;color:#e9fcff;border-color:#5c9da4}
+button:focus-visible,a:focus-visible{outline:3px solid white;outline-offset:3px}
+.note{max-width:800px;margin:22px auto 0;border-left:3px solid #d9bf85;padding:10px 14px;background:#112f40;border-radius:4px;font-size:.88rem}
+@media(prefers-reduced-motion:reduce){.snow{animation:none}}
+</style></head><body>
+<main>
+<div class="kicker">Russell 007 · Special Christmas introduction</div>
+<h1>Cinematic Christmas Eve at the North Pole 🎅🦌</h1>
+<p>Watch Santa finish loading presents, wave goodbye, and fly into the northern lights. Cyber Mouse remains available in the Network Lab.</p>
+<div class="stage">
+<img id="north-pole-film" src="assets/russell-santa-cyber-lab.gif?v=cinematic2026" alt="Cinematic Santa loads presents at the North Pole, waves goodbye, then flies with his reindeer over Russell's Cyber Security Lab and drops a gift on the roof." width="867" height="432">
+<div class="snow" aria-hidden="true"></div>
+</div>
+<div id="greeting" role="status" aria-live="polite">Santa loads the last presents before taking off!</div>
+<div class="actions">
+<button id="replay" type="button">↻ Replay Takeoff</button>
+<button id="music" type="button" class="secondary" aria-pressed="false">♪ Play Christmas Music</button>
+<a id="lab-entry" class="button" href="./index.html#top">Enter Russell's Network Lab →</a>
+</div>
+<p class="note">Cinematic Christmas animation: Santa visits Russell’s Cyber Security Lab and leaves a present on the roof. The greeting appears in text (not recorded speech). Select Play to hear Christmas music. You can enter the lab at any time.</p>
+</main>
+<script>
+(()=>{
+const movie=document.getElementById("north-pole-film"),message=document.getElementById("greeting"),music=document.getElementById("music");
+const words=["Santa is loading his final presents...","Santa turns and waves goodbye!","Ho! Ho! Ho! Merry Christmas!","The reindeer lift off toward Russell's Cyber Security Lab!","A Christmas present drops onto the lab roof!","Merry Christmas from Russell 007!"];
+let messageInterval;function replay(){
+movie.src="assets/russell-santa-cyber-lab.gif?v=4&replay="+Date.now();
+clearInterval(messageInterval);let step=0;message.textContent=words[0];
+messageInterval=setInterval(()=>{step=(step+1)%words.length;message.textContent=words[step]},2000)}
+document.getElementById("replay").addEventListener("click",replay);
+
+movie.addEventListener("error",()=>{message.textContent="Santa's animation could not load. Check the uploaded GIF path.";});
+replay();
+let audio,timer,playing=false;
+const freq={C:523.25,D:587.33,E:659.25,F:698.46,G:783.99};
+const notes="E E E - E E E - E G C D E - - - F F F F F E E E E D D E D - G -".split(" ");
+function stop(){playing=false;clearTimeout(timer);music.textContent="♪ Play Christmas Music";music.setAttribute("aria-pressed","false");if(audio){audio.close().catch(()=>{});audio=null}}
+function tune(){if(!playing||!audio)return;const t=audio.currentTime+.08;notes.forEach((n,i)=>{
+if(!freq[n])return;const when=t+i*.25,o=audio.createOscillator(),g=audio.createGain();
+o.type="sine";o.frequency.value=freq[n];g.gain.setValueAtTime(.001,when);g.gain.linearRampToValueAtTime(.06,when+.02);g.gain.exponentialRampToValueAtTime(.001,when+.24);
+o.connect(g).connect(audio.destination);o.start(when);o.stop(when+.25);
+});timer=setTimeout(tune,notes.length*250+100)}
+music.addEventListener("click",async()=>{if(playing){stop();return}try{
+audio=new(window.AudioContext||window.webkitAudioContext)();await audio.resume();playing=true;music.textContent="Ⅱ Pause Music";music.setAttribute("aria-pressed","true");tune();
+}catch{stop();music.textContent="Music unavailable"}});
+document.getElementById("lab-entry").addEventListener("click",()=>{try{sessionStorage.setItem("xmasSeen","yes")}catch{}});
+})();
+</script>
+</body></html>
