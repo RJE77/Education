@@ -210,6 +210,8 @@
 @media(max-width:690px){#xmas-banner{height:170px}.xmas-content{align-items:flex-end}.xmas-content h2{font-size:1.1rem}.xmas-content p{font-size:.72rem}.xmas-controls input{display:none}.xmas-santa{font-size:2rem}#xmas-banner.small .xmas-approach{display:none}}
 @media(prefers-reduced-motion:reduce){.xmas-approach,.xmas-nose,.xmas-hoho,.xmas-whiteout,.xmas-snow,.xmas-snow::before,.xmas-snow::after,.xmas-twinkle{animation:none!important}.xmas-approach{display:none}#xmas-banner{transition:none}}
 
+/* Keep the existing decorative banner but remove the old sleigh illustration. */
+.xmas-approach{display:none!important}
 </style>
 </head>
 <body>
@@ -251,7 +253,7 @@
   
 <div id="xmas-gate" role="dialog" aria-modal="true" aria-labelledby="xmas-title" hidden>
  <div><div style="font-size:3rem">💡</div><h2 id="xmas-title">The Network Lab is dark...</h2><p>Shall we turn on the Christmas lights?</p>
- <button class="xmas-btn" id="xmas-on" type="button">💡 Turn On the Lights</button>
+ <button class="xmas-btn" id="xmas-on" type="button">🎄 Visit Santa at the North Pole</button>
  <button class="xmas-btn" id="xmas-skip" type="button">Skip Holiday Intro → Enter Lab</button></div>
 </div>
 <section id="xmas-banner" aria-label="Happy Holidays from Russell's Network Lab">
@@ -950,7 +952,7 @@ approvedData.quickResponse = form.elements.quickResponse.checked;
    });
    timer=setTimeout(melody,notes.length*280+100);
  }
- document.getElementById("xmas-on").addEventListener("click",enter);
+ document.getElementById("xmas-on").addEventListener("click",()=>{ location.href="./north-pole.html"; });
  document.getElementById("xmas-skip").addEventListener("click",enter);
  document.getElementById("xmas-off").addEventListener("click",leave);
  window.addEventListener("scroll",compact,{passive:true});
