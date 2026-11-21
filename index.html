@@ -161,6 +161,32 @@
     .quick-question-float:focus-visible {outline:3px solid #e6c67a;outline-offset:4px;}
     @media(max-width:600px){.quick-question-float{right:12px;bottom:12px;padding:11px 15px;font-size:.85rem;}#visitor-thanks{bottom:82px !important;left:12px;right:12px !important;max-width:none !important;}}
     @media(min-width:601px){#visitor-thanks{bottom:88px !important;}}
+
+/* Russell's holiday scene */
+#xmas-gate[hidden]{display:none!important}
+#xmas-gate{position:fixed;inset:0;z-index:14000;background:radial-gradient(circle at top,#244256,#040b15 75%);color:white;display:grid;place-items:center;text-align:center;padding:24px}
+#xmas-gate h2{font-size:clamp(2rem,6vw,3.5rem)}
+.xmas-btn{font:inherit;font-weight:bold;cursor:pointer;background:#eecf8a;color:#102234;border:1px solid #fff5d2;border-radius:9px;padding:9px 14px;margin:5px}
+.xmas-btn:focus-visible{outline:3px solid white;outline-offset:3px}
+#xmas-banner{position:sticky;top:0;z-index:7000;height:206px;isolation:isolate;overflow:hidden;transition:height .4s;background:linear-gradient(90deg,#031523bb,#11394a55),url("assets/russell-holiday-banner.png") center/cover no-repeat,#143a51;box-shadow:0 7px 22px #0008}
+#xmas-banner.small{height:64px}
+.xmas-content{position:relative;z-index:3;height:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 20px;color:white}
+.xmas-content h2{color:white;font-size:clamp(1.1rem,3vw,2.45rem);margin:0;text-shadow:0 2px 12px #001}
+.xmas-content p{color:#ffe5a7;margin:0}
+#xmas-banner.small h2{font-size:1.05rem}
+#xmas-banner.small .xmas-content p{display:none}
+.xmas-controls{display:flex;justify-content:flex-end;gap:6px;align-items:center;flex-wrap:wrap}
+.xmas-controls .xmas-btn{font-size:.78rem;padding:6px}
+.xmas-controls input{width:64px}
+.xmas-santa{position:absolute;top:15%;left:0;font-size:3rem;z-index:2;white-space:nowrap;animation:santa-flight 22s linear infinite;filter:drop-shadow(0 3px 5px #000)}
+@keyframes santa-flight{from{transform:translateX(110vw)}to{transform:translateX(-500px)}}
+.xmas-snow{position:absolute;inset:-20px 0 0;z-index:1;pointer-events:none;background-image:radial-gradient(2px 2px at 25px 20px,#fff 98%,transparent),radial-gradient(2px 2px at 120px 65px,#fff 98%,transparent);background-size:180px 130px,210px 185px;animation:snow-fall 13s linear infinite}
+@keyframes snow-fall{to{transform:translateY(130px)}}
+.xmas-twinkle{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle at 10% 15%,#fff8b1 0 4px,transparent 5px),radial-gradient(circle at 70% 20%,#b9fff9 0 4px,transparent 5px);animation:xmas-twinkle 1.7s infinite alternate}
+@keyframes xmas-twinkle{from{opacity:.1}to{opacity:1}}
+@media(max-width:690px){#xmas-banner{height:170px}.xmas-content{align-items:flex-end}.xmas-content h2{font-size:1.1rem}.xmas-content p{font-size:.72rem}.xmas-controls input{display:none}.xmas-santa{font-size:2rem}#xmas-banner.small .xmas-santa{display:none}}
+@media(prefers-reduced-motion:reduce){.xmas-santa,.xmas-snow,.xmas-twinkle{animation:none!important}#xmas-banner{transition:none}}
+
 </style>
 </head>
 <body>
@@ -199,7 +225,21 @@
     </div>
     <iframe id="mouse-intro-frame" title="Russell 007: Cyber Mouse cinematic introduction" loading="eager" allow="autoplay"></iframe>
   </div>
-  <header>
+  
+<div id="xmas-gate" role="dialog" aria-modal="true" aria-labelledby="xmas-title" hidden>
+ <div><div style="font-size:3rem">💡</div><h2 id="xmas-title">The Network Lab is dark...</h2><p>Shall we turn on the Christmas lights?</p>
+ <button class="xmas-btn" id="xmas-on" type="button">💡 Turn On the Lights</button>
+ <button class="xmas-btn" id="xmas-skip" type="button">Skip Holiday Intro → Enter Lab</button></div>
+</div>
+<section id="xmas-banner" aria-label="Happy Holidays from Russell's Network Lab">
+ <div class="xmas-twinkle" aria-hidden="true"></div><div class="xmas-snow" aria-hidden="true"></div><div class="xmas-santa" aria-hidden="true">🦌 🦌 🦌 🎅🛷</div>
+ <div class="xmas-content">
+ <div><h2>Happy Holidays from Russell's Network Lab</h2><p>Warm wishes from our network to yours ✨</p></div>
+ <div class="xmas-controls"><button class="xmas-btn" id="xmas-music" type="button" aria-pressed="false">▶ Music</button><input id="xmas-volume" type="range" min="0" max="100" value="30" aria-label="Music volume"><button class="xmas-btn" id="xmas-off" type="button">☾ Lights Off</button></div>
+ </div>
+</section>
+
+<header>
     <div class="wrap nav">
       <a class="brand" href="#top">Russell Everson / Network Lab</a>
       <nav aria-label="Page sections">
@@ -852,9 +892,50 @@ approvedData.quickResponse = form.elements.quickResponse.checked;
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
   let seen = false;
   try { seen = sessionStorage.getItem("mouseIntroSeen") === "yes"; } catch {}
-  if (!reduceMotion && !seen && (!location.hash || location.hash === "#top")) open();
+  // Cyber Mouse replay remains available; seasonal entrance replaces auto-open.
+  // if (!reduceMotion && !seen && (!location.hash || location.hash === "#top")) open();
 })();
 </script>
+
+<script>
+/* Holiday effects are independent of portfolio tracking and contact forms. */
+(()=> {
+ const gate=document.getElementById("xmas-gate"),banner=document.getElementById("xmas-banner"),music=document.getElementById("xmas-music");
+ const vol=document.getElementById("xmas-volume");let ctx,gain,timer,playing=false;
+ const notes="E E E - E E E - E G C D E - - - F F F F F E E E E D D E D - G - E E E - E E E - E G C D E - - - F F F F F E E E G G F D C - - -".split(" ");
+ const freq={C:523.25,D:587.33,E:659.25,F:698.46,G:783.99};
+ function compact(){banner.classList.toggle("small",scrollY>155)}
+ function enter(){gate.hidden=true;document.body.style.overflow="";try{sessionStorage.setItem("xmasSeen","yes")}catch{}compact()}
+ function stop(){playing=false;clearTimeout(timer);music.textContent="▶ Music";music.setAttribute("aria-pressed","false");if(ctx){ctx.close().catch(()=>{});ctx=null}}
+ function leave(){stop();gate.hidden=false;document.body.style.overflow="hidden";try{sessionStorage.removeItem("xmasSeen")}catch{}document.getElementById("xmas-on").focus()}
+ function melody(){
+   if(!ctx||!playing)return;
+   const start=ctx.currentTime+.08;
+   notes.forEach((note,i)=>{
+     if(note==="-")return;
+     const t=start+i*.28,o=ctx.createOscillator(),g=ctx.createGain();
+     o.type="sine";o.frequency.value=freq[note];
+     g.gain.setValueAtTime(.001,t);g.gain.linearRampToValueAtTime(.15,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+.26);
+     o.connect(g).connect(gain);o.start(t);o.stop(t+.27);
+   });
+   timer=setTimeout(melody,notes.length*280+100);
+ }
+ document.getElementById("xmas-on").addEventListener("click",enter);
+ document.getElementById("xmas-skip").addEventListener("click",enter);
+ document.getElementById("xmas-off").addEventListener("click",leave);
+ window.addEventListener("scroll",compact,{passive:true});
+ vol.addEventListener("input",()=>{if(gain)gain.gain.value=Number(vol.value)/100*.18});
+ music.addEventListener("click",async()=>{
+   if(playing){stop();return}
+   try{ctx=new (window.AudioContext||window.webkitAudioContext)();await ctx.resume();gain=ctx.createGain();gain.gain.value=Number(vol.value)/100*.18;gain.connect(ctx.destination);playing=true;music.textContent="⏸ Pause";music.setAttribute("aria-pressed","true");melody()}
+   catch{stop();music.textContent="Music unavailable"}
+ });
+ let seen=false;try{seen=sessionStorage.getItem("xmasSeen")==="yes"}catch{}
+ if(!seen&&(!location.hash||location.hash==="#top")){gate.hidden=false;document.body.style.overflow="hidden";document.getElementById("xmas-on").focus()}
+ compact();
+})();
+</script>
+
 </body>
 </html>
 
