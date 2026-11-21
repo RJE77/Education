@@ -8,7 +8,18 @@ main{width:min(910px,calc(100% - 28px));margin:0 auto;padding:25px 0 55px}
 h1{font:700 clamp(1.75rem,4.6vw,3rem) Georgia,serif;color:#f9d89b;margin:6px 0}
 p{color:#c7dce6;margin:6px 0 15px}
 .stage{position:relative;max-width:730px;margin:18px auto;border-radius:18px;overflow:hidden;border:2px solid #ccac75;background:linear-gradient(#153e52,#051421);box-shadow:0 24px 66px #0009}
-.stage img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:contain}
+.stage svg{display:block;width:100%;height:auto}
+.aurora{animation:shimmer 6s ease-in-out infinite alternate;transform-origin:center}
+.sleigh-flight{animation:takeoff 12s ease-in-out infinite;transform-origin:400px 310px}
+.wave{animation:wave 1s ease-in-out 3.3s 3 alternate;transform-origin:143px 6px}
+.gift{animation:giftload 12s ease-in-out infinite;transform-origin:center}
+.flakes{animation:flakes 9s linear infinite}
+@keyframes shimmer{from{opacity:.45;transform:translateX(-30px)}to{opacity:1;transform:translateX(35px)}}
+@keyframes takeoff{0%,25%{transform:translate(0,0) scale(1)}35%{transform:translate(-5px,-6px) scale(1)}50%{transform:translate(35px,-80px) scale(.90)}70%{transform:translate(240px,-240px) scale(.55)}87%,100%{transform:translate(600px,-390px) scale(.25);opacity:0}}
+@keyframes wave{to{transform:rotate(-25deg)}}
+@keyframes giftload{0%,12%{opacity:1;transform:translate(378px,376px)}28%,100%{opacity:0;transform:translate(330px,310px)}}
+@keyframes flakes{to{transform:translateY(480px)}}
+@media(prefers-reduced-motion:reduce){.aurora,.sleigh-flight,.wave,.gift,.flakes{animation:none}}
 .snow{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(2px 2px at 21px 20px,#fff 95%,transparent),radial-gradient(2px 2px at 61px 85px,#fff 95%,transparent);background-size:140px 130px,175px 155px;animation:fall 8s linear infinite}
 @keyframes fall{to{background-position:18px 130px,-22px 155px}}
 #greeting{text-align:center;min-height:2em;font:700 clamp(1.2rem,3.7vw,2rem) Georgia,serif;color:#ffe3a5}
@@ -22,8 +33,45 @@ button:focus-visible,a:focus-visible{outline:3px solid white;outline-offset:3px}
 <main>
 <div class="kicker">Russell 007 · Special Christmas introduction</div>
 <h1>Christmas Eve at the North Pole 🎅🦌</h1>
-<p>Santa loads the last gifts, waves goodbye, and takes off into the northern lights. Cyber Mouse is still available in the Network Lab.</p>
-<div class="stage"><img id="north-pole-film" src="assets/north-pole-departure.gif" alt="Santa loads his final presents, waves goodbye and flies away in his sleigh with reindeer." width="508" height="508">
+<p>Watch Santa finish loading presents, wave goodbye, and fly into the northern lights. Cyber Mouse remains available in the Network Lab.</p>
+<div class="stage" role="img" aria-label="Animated North Pole Christmas Eve scene: Santa loads gifts near a warm cottage, waves, and flies away in his sleigh pulled by reindeer under the northern lights.">
+<svg id="north-pole-film" viewBox="0 0 760 520" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<defs>
+<linearGradient id="night" x2="0" y2="1"><stop stop-color="#06152c"/><stop offset=".58" stop-color="#123b50"/><stop offset="1" stop-color="#316078"/></linearGradient>
+<linearGradient id="aurora" x1="0" x2="1"><stop stop-color="#58d3bc" stop-opacity="0"/><stop offset=".45" stop-color="#61edc6" stop-opacity=".48"/><stop offset=".8" stop-color="#78a6ed" stop-opacity=".25"/><stop offset="1" stop-color="#6cecb6" stop-opacity="0"/></linearGradient>
+<linearGradient id="snowground" x2="0" y2="1"><stop stop-color="#e6f5ff"/><stop offset="1" stop-color="#8fb9d0"/></linearGradient>
+<linearGradient id="coat" x2="1" y2="1"><stop stop-color="#f74a3e"/><stop offset="1" stop-color="#8a1522"/></linearGradient>
+<radialGradient id="warm"><stop stop-color="#ffe6a0" stop-opacity=".7"/><stop offset="1" stop-color="#ffe6a0" stop-opacity="0"/></radialGradient>
+<filter id="glow"><feGaussianBlur stdDeviation="8"/></filter>
+<g id="pine"><path d="M0 -70 L-31 -10 H-16 L-42 25 H-20 L-52 61 H52 L20 25 H42 L16 -10 H31 Z" fill="#173f46" stroke="#76a9a4" stroke-width="1.4"/><path d="M0 -70 L-16 -37 M-16 -10 H20 M-24 25 H28" stroke="#d6eff0" stroke-width="4" opacity=".72"/></g>
+<g id="deer"><path d="M10 25 Q25 0 60 10 L84 7 L100 -6 L117 -5 L122 2 L113 14 L91 17 L79 28 L65 33 L54 32 L43 67 L34 67 L38 31 L21 35 L11 65 L2 65 Z" fill="#b77b4b" stroke="#5b3b2c" stroke-width="2"/><path d="M102 -8 L90 -32 L79 -36 M90 -32 L95 -48 M101 -10 L113 -34 L120 -36 M113 -34 L107 -47" fill="none" stroke="#d6b083" stroke-width="4" stroke-linecap="round"/><circle cx="115" cy="1" r="2.6" fill="#141d24"/><circle cx="122" cy="4" r="4" fill="#dd554a"/></g>
+</defs>
+<rect width="760" height="520" fill="url(#night)"/>
+<path class="aurora" d="M-60 110 Q140 -20 320 96 T810 30 L810 205 Q570 98 360 182 T-60 170Z" fill="url(#aurora)"/>
+<g fill="#e6f7ff"><circle cx="65" cy="42" r="2"/><circle cx="192" cy="62" r="1.6"/><circle cx="312" cy="39" r="1.5"/><circle cx="510" cy="76" r="2"/><circle cx="649" cy="49" r="1.5"/><circle cx="723" cy="120" r="2"/><circle cx="410" cy="116" r="1.6"/><circle cx="140" cy="132" r="1.4"/></g>
+<circle cx="625" cy="110" r="42" fill="#f2e9d1" opacity=".9"/><circle cx="625" cy="110" r="69" fill="#f2e9d1" opacity=".12" filter="url(#glow)"/>
+<path d="M0 354 Q120 306 280 346 T520 329 T760 350 V520 H0Z" fill="#366980"/>
+<path d="M0 410 Q170 355 330 407 T760 383 V520 H0Z" fill="url(#snowground)"/>
+<g opacity=".9"><use href="#pine" x="50" y="357" transform="translate(50 357) scale(.9) translate(-50 -357)"/><use href="#pine" x="698" y="371"/><use href="#pine" x="738" y="395" transform="translate(738 395) scale(.7) translate(-738 -395)"/><use href="#pine" x="160" y="353" transform="translate(160 353) scale(.6) translate(-160 -353)"/></g>
+<ellipse cx="261" cy="397" rx="170" ry="110" fill="url(#warm)" opacity=".6"/>
+<g id="cottage"><rect x="136" y="313" width="188" height="123" rx="6" fill="#865847" stroke="#d4a782" stroke-width="4"/><path d="M115 321 L230 246 L346 321Z" fill="#703c3a" stroke="#dcecf2" stroke-width="8" stroke-linejoin="round"/><rect x="150" y="346" width="53" height="50" rx="5" fill="#ffdf8a" stroke="#443e43" stroke-width="7"/><path d="M177 347 V396 M151 372 H204" stroke="#765743" stroke-width="5"/><rect x="245" y="351" width="57" height="85" rx="5" fill="#4a3e3b" stroke="#c5a184" stroke-width="5"/><circle cx="291" cy="392" r="3" fill="#ffd37b"/><path d="M275 274 V246 H303 V293" fill="#72565a" stroke="#eaf4f7" stroke-width="6"/><path d="M145 311 L231 253 L329 312" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/></g>
+<path d="M0 454 Q200 434 390 454 T760 443 V520 H0Z" fill="#e4f3fb" opacity=".55"/>
+<g class="gift" transform="translate(378 376)"><rect x="0" y="0" width="39" height="38" rx="3" fill="#e84552"/><path d="M16 0 V38 M0 13 H39" stroke="#ffd488" stroke-width="8"/><path d="M18 0 Q-3 -28 7 -25 Q18 -25 21 -1 Q31 -28 39 -22 Q48 -11 21 0" fill="none" stroke="#ffd488" stroke-width="5"/></g>
+<g class="sleigh-flight">
+<g transform="translate(310 286)">
+<g transform="translate(196 -35) scale(.76)"><use href="#deer" x="0" y="0"/></g>
+<g transform="translate(294 -47) scale(.69)"><use href="#deer" x="0" y="0"/></g>
+<path d="M136 7 Q192 -8 256 -9 M145 21 Q191 10 256 10" stroke="#d5c28f" stroke-width="2.2" fill="none"/>
+<path d="M0 65 Q56 90 143 61 L151 31 L119 35 Q95 53 25 36 L8 17 L-1 20 Z" fill="#9d2433" stroke="#eac586" stroke-width="4"/>
+<path d="M-13 75 Q-15 92 22 91 H145 Q171 87 172 66 M16 93 V75 M127 89 L145 63" stroke="#f7d99a" stroke-width="7" stroke-linecap="round" fill="none"/>
+<rect x="6" y="7" width="47" height="35" rx="4" fill="#388c77"/><path d="M23 8 V41 M7 21 H52" stroke="#ffd392" stroke-width="6"/>
+<rect x="48" y="1" width="36" height="40" rx="5" fill="#e8ab4c"/><path d="M67 1 V40" stroke="#f8e4bd" stroke-width="6"/>
+<ellipse cx="100" cy="24" rx="30" ry="39" fill="url(#coat)"/><path d="M77 49 Q105 55 128 47" stroke="white" stroke-width="10"/>
+<circle cx="105" cy="-17" r="23" fill="#f6c89e"/><path d="M85 -18 Q105 -33 128 -16 Q122 12 104 17 Q88 13 85 -18Z" fill="#fff6e8"/><path d="M86 -23 Q97 -45 119 -39 L134 -17 Q105 -26 79 -15 Z" fill="#ba2134" stroke="#faf4e8" stroke-width="5"/><circle cx="134" cy="-16" r="7" fill="#faf3ee"/><circle cx="110" cy="-18" r="2.5" fill="#31313b"/><path d="M108 -7 Q114 -2 122 -8" stroke="#a15a55" stroke-width="2.3" fill="none"/>
+<g class="wave"><path d="M124 8 L151 -12 L161 -6" stroke="#b51d2e" stroke-width="16" stroke-linecap="round" fill="none"/><ellipse cx="161" cy="-8" rx="10" ry="13" fill="#fff4e7"/></g>
+</g></g>
+<g class="flakes" fill="#effaff" opacity=".8"><circle cx="24" cy="15" r="2.6"/><circle cx="92" cy="105" r="2"/><circle cx="227" cy="15" r="2.7"/><circle cx="348" cy="79" r="2"/><circle cx="460" cy="44" r="2.4"/><circle cx="587" cy="24" r="2"/><circle cx="701" cy="55" r="2.6"/></g>
+</svg>
 <div class="snow" aria-hidden="true"></div></div>
 <div id="greeting" role="status" aria-live="polite">Santa is loading the last presents...</div>
 <div class="actions">
@@ -31,18 +79,18 @@ button:focus-visible,a:focus-visible{outline:3px solid white;outline-offset:3px}
 <button id="music" type="button" class="secondary" aria-pressed="false">♪ Play Christmas Music</button>
 <a id="lab-entry" class="button" href="./index.html#top">Enter Russell's Network Lab →</a>
 </div>
-<p class="note">The North Pole scene is an illustrated six-step animation. The Ho! Ho! Ho! greeting appears in text, not a recorded voice. Music plays only after you select Play. You can enter the lab at any time.</p>
+<p class="note">The North Pole scene is an illustrated animated sequence. “Ho! Ho! Ho! Merry Christmas!” appears on screen (not recorded speech). Music starts only when you select Play. You can enter the lab at any time.</p>
 </main>
 <script>
 (()=>{
 const movie=document.getElementById("north-pole-film"),message=document.getElementById("greeting"),music=document.getElementById("music");
 const words=["Santa is loading the last presents...","Just one more present!","Reindeer ready!","Ho! Ho! Ho! Merry Christmas!","Santa and Rudolph take off!","Off into the North Pole sky!"];
 let messageInterval;function replay(){
-movie.src="";movie.src="assets/north-pole-departure.gif?replay="+Date.now();
+movie.getAnimations({subtree:true}).forEach(a=>{a.cancel();a.play()});
 clearInterval(messageInterval);let step=0;message.textContent=words[0];
-messageInterval=setInterval(()=>{step=(step+1)%words.length;message.textContent=words[step]},650)}
+messageInterval=setInterval(()=>{step=(step+1)%words.length;message.textContent=words[step]},2000)}
 document.getElementById("replay").addEventListener("click",replay);
-movie.addEventListener("error",()=>{message.textContent="Christmas animation unavailable. You can still enter the Network Lab."});
+
 replay();
 let audio,timer,playing=false;
 const freq={C:523.25,D:587.33,E:659.25,F:698.46,G:783.99};
