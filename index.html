@@ -180,11 +180,14 @@
 .xmas-controls input{width:64px}
 .xmas-santa{position:absolute;top:15%;left:0;font-size:3rem;z-index:2;white-space:nowrap;animation:santa-flight 22s linear infinite;filter:drop-shadow(0 3px 5px #000)}
 @keyframes santa-flight{from{transform:translateX(110vw)}to{transform:translateX(-500px)}}
-.xmas-snow{position:absolute;inset:-260px 0 0;z-index:1;pointer-events:none;overflow:hidden;background-image:radial-gradient(2px 2px at 18px 18px,#fff 98%,transparent),radial-gradient(3px 3px at 58px 44px,#dff6ff 98%,transparent),radial-gradient(2px 2px at 33px 66px,#fff 98%,transparent);background-size:75px 82px,105px 112px,95px 94px;animation:snow-fall-heavy 5.8s linear infinite;opacity:.9}
+.xmas-snow{position:absolute;inset:-260px 0 0;z-index:4;pointer-events:none;overflow:hidden;background-image:radial-gradient(2px 2px at 18px 18px,#fff 98%,transparent),radial-gradient(3px 3px at 58px 44px,#dff6ff 98%,transparent),radial-gradient(2px 2px at 33px 66px,#fff 98%,transparent);background-size:75px 82px,105px 112px,95px 94px;animation:snow-fall-heavy 5.8s linear infinite;opacity:.9}
 .xmas-snow::before,.xmas-snow::after{content:"";position:absolute;inset:0;pointer-events:none}
 .xmas-snow::before{background-image:radial-gradient(3px 3px at 11px 30px,#fff 98%,transparent),radial-gradient(2px 2px at 61px 74px,#fff 98%,transparent);background-size:115px 120px,85px 94px;opacity:.85;animation:snow-fall-heavy 8s linear infinite}
 .xmas-snow::after{background-image:radial-gradient(4px 4px at 26px 46px,#fff 98%,transparent),radial-gradient(3px 3px at 82px 9px,#ebf8ff 98%,transparent);background-size:154px 145px,126px 138px;opacity:.7;animation:snow-fall-heavy 4.5s linear infinite}
 @keyframes snow-fall-heavy{from{transform:translateY(-40px) translateX(-8px)}to{transform:translateY(240px) translateX(19px)}}
+/* Bright close-up flakes above the image so snowfall stays visibly distinct. */
+.xmas-snow{filter:drop-shadow(0 0 2px #d3f1ff);opacity:1}
+.xmas-snow::after{background-size:74px 78px,92px 90px;opacity:.9}
 .xmas-twinkle{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle at 10% 15%,#fff8b1 0 4px,transparent 5px),radial-gradient(circle at 70% 20%,#b9fff9 0 4px,transparent 5px);animation:xmas-twinkle 1.7s infinite alternate}
 @keyframes xmas-twinkle{from{opacity:.1}to{opacity:1}}
 @media(max-width:690px){#xmas-banner{height:170px}.xmas-content{align-items:flex-end}.xmas-content h2{font-size:1.1rem}.xmas-content p{font-size:.72rem}.xmas-controls input{display:none}.xmas-santa{font-size:2rem}#xmas-banner.small .xmas-santa{display:none}}
